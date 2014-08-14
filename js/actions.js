@@ -1,9 +1,9 @@
 var httpUrl = location.protocol + "//" + location.host;
-
+var appName = "WS-Humantask-Explorer"; //TODO finalize appName
 function claimTask(id){
 
 	//TODO update to proper url [UISampleCode1_1]
-	var requestUrl = "/UISampleCode1_1/action?type=claim_task&tid=" +id;
+	var requestUrl = "/"+ appName +"/action?type=claim_task&tid=" +id;
 	//document.getElementById("demo").innerHTML = requestUrl;
 	
 	
@@ -21,7 +21,7 @@ function claimTask(id){
 			
 			if (success == 'true'){
 				//successful
-				window.location=httpUrl+"/UISampleCode1_1/inboxtask?id=" +id;
+				window.location=httpUrl+"/"+ appName +"/inboxtask?id=" +id;
 			}else{
 				//unsuccessful
 				alert("Unable to claim the task : " +id);
@@ -35,7 +35,7 @@ function claimTask(id){
 
 function startTask(id) {
 	//TODO update to proper url [UISampleCode1_1]
-	var requestUrl = "/UISampleCode1_1/action?type=start_task&tid=" +id;
+	var requestUrl = "/"+ appName +"/action?type=start_task&tid=" +id;
 	//document.getElementById("demo").innerHTML = requestUrl;
 	
 	
@@ -66,7 +66,7 @@ function startTask(id) {
 				alert("Task Start success : " +id);
 
 				//TODO update to proper url [UISampleCode1_1]
-				window.location=httpUrl+"/UISampleCode1_1/inboxtask?id="+id;
+				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 
 			}else{
 				//unsuccessful
@@ -82,7 +82,7 @@ function startTask(id) {
 function stopTask(id){
 
 	//TODO update to proper url [UISampleCode1_1]
-	var requestUrl = "/UISampleCode1_1/action?type=stop_task&tid=" +id;
+	var requestUrl = "/"+ appName +"/action?type=stop_task&tid=" +id;
 	//document.getElementById("demo").innerHTML = requestUrl;
 	
 	
@@ -111,7 +111,7 @@ function stopTask(id){
 				alert("Task Start success : " +id);
 
 				//TODO update to proper url [UISampleCode1_1]
-				window.location=httpUrl+"/UISampleCode1_1/inboxtask?id="+id;
+				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 
 			}else{
 				//unsuccessful
@@ -127,7 +127,7 @@ function stopTask(id){
 
 function releaseTask (id) {
 	//TODO update to proper url [UISampleCode1_1]
-	var requestUrl = "/UISampleCode1_1/action?type=release_task&tid=" +id;
+	var requestUrl = "/"+ appName +"/action?type=release_task&tid=" +id;
 	//document.getElementById("demo").innerHTML = requestUrl;
 	
 	
@@ -153,14 +153,14 @@ function releaseTask (id) {
 																  		<button type="button" class="btn btn-default">Suspend</button>\
 																  		<button type="button" class="btn btn-default">Comment</button>\
 																  		<button type="button" class="btn btn-default">Assign</button>';
-				alert("Task Start success : " +id);
+				alert("Task RELEASE success : " +id);
 
 				//TODO update to proper url [UISampleCode1_1]
-				window.location=httpUrl+"/UISampleCode1_1/taskview?id="+id;
+				window.location=httpUrl+"/"+ appName +"/taskview?id="+id;
 
 			}else{
 				//unsuccessful
-				alert("Unable to start the task : " +id);
+				alert("Unable to RELEASE the task : " +id);
 			}
         }
 		
@@ -171,7 +171,7 @@ function releaseTask (id) {
 
 function suspendTask(id){
 	//TODO update to proper url [UISampleCode1_1]
-	var requestUrl = "/UISampleCode1_1/action?type=suspend_task&tid=" +id;
+	var requestUrl = "/"+ appName +"/action?type=suspend_task&tid=" +id;
 	//document.getElementById("demo").innerHTML = requestUrl;
 	
 	
@@ -190,21 +190,21 @@ function suspendTask(id){
 						
 			if (success == 'true'){
 				//successful
-				//window.location=httpUrl+"/UISampleCode1_1/inboxtask?id=" +id;
+				
 				//TODO : decide whether to remove this or not
 				/*document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
 																  		<button type="button" class="btn btn-default">Suspend</button>\
 																  		<button type="button" class="btn btn-default">Comment</button>\
 																  		<button type="button" class="btn btn-default">Assign</button>';*/
-				alert("Task Start success : " +id);
+				alert("Task SUSPEND success : " +id);
 
 				//TODO update to proper url [UISampleCode1_1]
-				//window.location=httpUrl+"/UISampleCode1_1/taskview?id="+id;
+				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 
 			}else{
 				//unsuccessful
-				alert("Unable to start the task : " +id);
+				alert("Unable to SUSPEND the task : " +id);
 			}
         }
 		
@@ -214,11 +214,94 @@ function suspendTask(id){
 
 
 
+function resumeTask(id){
+	//TODO update to proper url [UISampleCode1_1]
+	var requestUrl = "/"+ appName +"/action?type=resume_task&tid=" +id;
+	//document.getElementById("demo").innerHTML = requestUrl;
+	
+	
+	
+	$.ajax({
+		
+		type: 'POST',
+		url: httpUrl + requestUrl,
+		success: function(data){
+        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
+			//document.getElementById("demo").innerHTML = data;
+			//document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
+			
+			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
+			
+						
+			if (success == 'true'){
+				//successful
+				
+				//TODO : decide whether to remove this or not
+				/*document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
+																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
+																  		<button type="button" class="btn btn-default">Suspend</button>\
+																  		<button type="button" class="btn btn-default">Comment</button>\
+																  		<button type="button" class="btn btn-default">Assign</button>';*/
+				alert("Task RESUME success : " +id);
+
+				//TODO update to proper url [UISampleCode1_1]
+				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
+
+			}else{
+				//unsuccessful
+				alert("Unable to RESUME the task : " +id);
+			}
+        }
+		
+	})
+
+
+}
 
 
 
+function failTask(id){
+	
+	//TODO update to proper url [UISampleCode1_1]
+	var requestUrl = "/"+ appName +"/action?type=fail_task&tid=" +id;
+	//document.getElementById("demo").innerHTML = requestUrl;
+	
+	
+	
+	$.ajax({
+		
+		type: 'POST',
+		url: httpUrl + requestUrl,
+		success: function(data){
+        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
+			//document.getElementById("demo").innerHTML = data;
+			//document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
+			
+			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
+			
+						
+			if (success == 'true'){
+				//successful
+				
+				//TODO : decide whether to remove this or not
+				/*document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
+																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
+																  		<button type="button" class="btn btn-default">Suspend</button>\
+																  		<button type="button" class="btn btn-default">Comment</button>\
+																  		<button type="button" class="btn btn-default">Assign</button>';*/
+				alert("Task FAIL success : " +id);
 
+				//TODO update to proper url [UISampleCode1_1]
+				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 
+			}else{
+				//unsuccessful
+				alert("Unable to FAIL the task : " +id);
+			}
+        }
+		
+	})
+}
 
 
 

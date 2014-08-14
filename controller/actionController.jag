@@ -169,42 +169,125 @@
 		
 	}else if (actionType == 'suspend_task'){
 		var result = suspendTask(taskId);
-				log.info('release_task reply : ' +result);
-				
-				var occurence = result.toXMLString().indexOf('<ns2:suspendResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>');
-				
-				if(occurence < 0){
-					//start unsuccessfull
-					var responseMsg = '<suspend_taskResponse><success>false</success></suspend_taskResponse>';
-					
-				}else{
-					//start successfull
-					var responseMsg = '<suspend_taskResponse><success>true</success></suspend_taskResponse>';
-					//TODO decide whether to redirect to inboxTask instead of response
-				}
-				
-				response.contentType = 'text/xml';
-				response.content = responseMsg;
-				
-				/*
-				 * SUCCESS RESPONSE
-				<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-				   <soapenv:Body>
-				      <ns2:suspendResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>
-				   </soapenv:Body>
-				</soapenv:Envelope>
-					
-				   UNSUCCESS RESPONSE
-				   <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-					   <soapenv:Body>
-					      <soapenv:Fault>
-					         <faultcode>soapenv:Server</faultcode>
-					         <faultstring>User[regionalClerkUser2] cannot perform [class org.wso2.carbon.humantask.core.engine.commands.Suspend] operation on task[3506] as the task is in state[SUSPENDED]. [class org.wso2.carbon.humantask.core.engine.commands.Suspend] operation can be performed only on tasks in states[RESERVED,READY,IN_PROGRESS]</faultstring>
-					         <detail/>
-					      </soapenv:Fault>
-					   </soapenv:Body>
-					</soapenv:Envelope>
-					*/
+		log.info('release_task reply : ' +result);
+		
+		var occurence = result.toXMLString().indexOf('<ns2:suspendResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>');
+		
+		if(occurence < 0){
+			//start unsuccessfull
+			var responseMsg = '<suspend_taskResponse><success>false</success></suspend_taskResponse>';
+			
+		}else{
+			//start successfull
+			var responseMsg = '<suspend_taskResponse><success>true</success></suspend_taskResponse>';
+			//TODO decide whether to redirect to inboxTask instead of response
+		}
+		
+		response.contentType = 'text/xml';
+		response.content = responseMsg;
+		
+		/*
+		 * SUCCESS RESPONSE
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+		   <soapenv:Body>
+		      <ns2:suspendResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>
+		   </soapenv:Body>
+		</soapenv:Envelope>
+			
+		   UNSUCCESS RESPONSE
+		   <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+			   <soapenv:Body>
+			      <soapenv:Fault>
+			         <faultcode>soapenv:Server</faultcode>
+			         <faultstring>User[regionalClerkUser2] cannot perform [class org.wso2.carbon.humantask.core.engine.commands.Suspend] operation on task[3506] as the task is in state[SUSPENDED]. [class org.wso2.carbon.humantask.core.engine.commands.Suspend] operation can be performed only on tasks in states[RESERVED,READY,IN_PROGRESS]</faultstring>
+			         <detail/>
+			      </soapenv:Fault>
+			   </soapenv:Body>
+			</soapenv:Envelope>
+			*/
+		
+	}else if (actionType == 'resume_task'){
+		
+		var result = resumeTask(taskId);
+		log.info('resume_task reply : ' +result);
+		
+		var occurence = result.toXMLString().indexOf('<ns2:resumeResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>');
+		
+		if(occurence < 0){
+			//start unsuccessfull
+			var responseMsg = '<suspend_taskResponse><success>false</success></suspend_taskResponse>';
+			
+		}else{
+			//start successfull
+			var responseMsg = '<suspend_taskResponse><success>true</success></suspend_taskResponse>';
+			//TODO decide whether to redirect to inboxTask instead of response
+		}
+		
+		response.contentType = 'text/xml';
+		response.content = responseMsg; 
+		
+		/*
+		 * SUCCESS RESPONSE
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+		   <soapenv:Body>
+		      <ns2:resumeResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>
+		   </soapenv:Body>
+		</soapenv:Envelope>
+			
+		   UNSUCCESS RESPONSE
+		   
+		   <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+			   <soapenv:Body>
+			      <soapenv:Fault>
+			         <faultcode>soapenv:Server</faultcode>
+			         <faultstring>User[regionalClerkUser2] cannot [class org.wso2.carbon.humantask.core.engine.commands.Resume] task[3506] as the task is in state[IN_PROGRESS]. Only tasks in [SUSPENDED] state can be resumed!</faultstring>
+			         <detail/>
+			      </soapenv:Fault>
+			   </soapenv:Body>
+			</soapenv:Envelope>
+
+			*/
+	}else if (actionType == 'fail_task'){
+		
+		var result = failTask(taskId);
+		log.info('fail_task reply : ' +result);
+		
+		var occurence = result.toXMLString().indexOf('<ns2:failResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>');
+		
+		if(occurence < 0){
+			//start unsuccessfull
+			var responseMsg = '<suspend_taskResponse><success>false</success></suspend_taskResponse>';
+			
+		}else{
+			//start successfull
+			var responseMsg = '<suspend_taskResponse><success>true</success></suspend_taskResponse>';
+			//TODO decide whether to redirect to inboxTask instead of response
+		}
+		
+		response.contentType = 'text/xml';
+		response.content = responseMsg; 
+		
+		/*
+		 * SUCCESS RESPONSE
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+		   <soapenv:Body>
+		      <ns2:failResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>
+		   </soapenv:Body>
+		</soapenv:Envelope>
+			
+		   UNSUCCESS RESPONSE
+		   
+		   <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+			   <soapenv:Body>
+			      <soapenv:Fault>
+			         <faultcode>soapenv:Server</faultcode>
+			         <faultstring>User[regionalClerkUser2] cannot [Fail] task[id:3511] as the task is in state[FAILED]. [Fail] operation can be performed on tasks in state[IN_PROGRESS]!</faultstring>
+			         <detail/>
+			      </soapenv:Fault>
+			   </soapenv:Body>
+			</soapenv:Envelope>
+
+			*/
 	}
 	
 	
@@ -308,7 +391,7 @@
 	
 	function suspendTask(id){
 		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
-											xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">
+											xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
 						   <soapenv:Header/>\
 						   <soapenv:Body>\
 						      <ns:suspend>\
@@ -322,6 +405,57 @@
 		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
 		
 		var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/suspend';
+		
+		var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
+		
+		return result;
+	}
+	
+	
+	
+	
+	function resumeTask(id){
+		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+										xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+						   <soapenv:Header/>\
+						   <soapenv:Body>\
+						      <ns:resume>\
+						         <ns:identifier>' +id +'</ns:identifier>\
+						      </ns:resume>\
+						   </soapenv:Body>\
+						</soapenv:Envelope>';
+				
+		var BPSSessionCookie = session.get('BPSSessionCookie');
+		
+		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
+		
+		var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/resume';
+		
+		var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
+		
+		return result;
+	}
+	
+	
+	function failTask(id){
+		
+		//TODO decide whether need to add fault information : fault Name and Data
+		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+												 xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"\
+												 xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">\
+						   <soapenv:Header/>\
+						   <soapenv:Body>\
+						      <ns:fail>\
+						         <ns:identifier>'+id +'</ns:identifier>\
+						      </ns:fail>\
+						   </soapenv:Body>\
+						</soapenv:Envelope>';
+				
+		var BPSSessionCookie = session.get('BPSSessionCookie');
+		
+		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
+		
+		var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/fail';
 		
 		var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
 		

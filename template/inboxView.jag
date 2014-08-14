@@ -14,16 +14,24 @@
 
 		  <div class="row">
 		  		<div class="col-sm-2 col-md-2 sidebar">
-		          <ul class="nav nav-sidebar">
-		            <li class="active"><a href="#">Reserved</a></li>
-		            <li><a href="#">In Progress</a></li>
-		            <li><a href="#">Suspended</a></li>
-		            <li><a href="#">Completed</a></li>
-		            <li><a href="#">Failed</a></li>
+		          <ul class="nav nav-sidebar nav-pills nav-stacked">
+		          	<%
+		          		function updateActiveStatusNavTab(status, button){
+		          			if (status != button){
+		          				return "";
+		          			}
+		          			return "class=\"active\"";
+		          		}
+		          	%>
+		            <li <%=updateActiveStatusNavTab(statusQuery, "RESERVED")%>><a href="inbox?status_query=RESERVED">Reserved</a></li>
+		            <li <%=updateActiveStatusNavTab(statusQuery, "IN_PROGRESS")%>><a href="inbox?status_query=IN_PROGRESS">In Progress</a></li>
+		            <li <%=updateActiveStatusNavTab(statusQuery, "SUSPENDED")%>><a href="inbox?status_query=SUSPENDED">Suspended</a></li>
+		            <li <%=updateActiveStatusNavTab(statusQuery, "COMPLETED")%>><a href="inbox?status_query=COMPLETED">Completed</a></li>
+		            <li <%=updateActiveStatusNavTab(statusQuery, "FAILED")%>><a href="inbox?status_query=FAILED">Failed</a></li>
 		          </ul>
 		        </div>
 
-		        <div class="col-sm-9 col-md-10 main">
+		        <div class="col-sm-10 col-md-10 main">
 				    <!-- Table -->
 				  	<table class="table">
 					    <thead>

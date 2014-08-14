@@ -6,7 +6,7 @@
   <artifactId>ws-humantask-explorer</artifactId>
   <version>1.0.0</version>
   <packaging>pom</packaging>
-  <name>WS-HumanTask-Explorer</name>
+  <name>ws-humantask-explorer</name>
   <description>WS-HumanTask-Explorer</description>
   <properties>
     <CApp.type>jaggery/app</CApp.type>
