@@ -1,0 +1,123 @@
+<%
+	log.info("START : inboxModel");
+	
+	var pagination = request.getParameter("pagination");
+		
+	log.info("pagination : " + pagination);
+	
+	if (pagination == null || pagination == ""){
+		pagination = 1;
+	}
+	
+	
+	var pageSize = 10;
+	var pageNumber = pagination - 1;
+	var queryOrder = 'DESCENDING';
+	var queryOrderBy = 'CREATED_DATE';
+	var queryCategory = 'ASSIGNED_TO_ME';
+	
+	//update current page
+	session.put('currentPage', 'inbox');
+
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803" xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:simpleQuery>\
+					         <ns:simpleQueryInput>\
+            					<ns1:pageSize>'+pageSize +'</ns1:pageSize>\
+            					<ns1:pageNumber>' +pageNumber +'</ns1:pageNumber>\
+					            <ns1:simpleQueryCategory>' +queryCategory +'</ns1:simpleQueryCategory>\
+            					<ns1:queryOrder>' +queryOrder +'</ns1:queryOrder>\
+            					<ns1:queryOrderBy>' +queryOrderBy +'</ns1:queryOrderBy>\
+					         </ns:simpleQueryInput>\
+					      </ns:simpleQuery>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';
+
+
+	//get session cookie with BPS
+	BPSSessionCookie = session.get('BPSSessionCookie');
+	log.info('SESSION COOKIE:' +BPSSessionCookie);
+	
+	var httpClient = new XMLHttpRequest();
+
+	//TODO : Retrieve endpoint from proper config file
+	var endPoint = BPSUrl +'/services/HumanTaskClientAPIAdmin/';
+
+	httpClient.open('POST', endPoint, false);
+	httpClient.setRequestHeader('COOKIE', BPSSessionCookie);
+	httpClient.setRequestHeader('SOAPAction', 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/simpleQuery');
+	httpClient.setRequestHeader('Content-Type','text/xml');
+
+
+	try{
+		httpClient.send(payload);
+		var BPSResponse = httpClient.responseText;
+		var BPSResponseXML = new XML(httpClient.responseText);
+		log.info('BPS RESPONSE : ' +BPSResponseXML);
+
+/*
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+  <soapenv:Body>
+    <ns2:simpleQueryResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">
+      <ns2:taskSimpleQueryResultSet>
+        <row xmlns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">
+          <id>454</id>
+          <taskType>TASK</taskType>
+          <name xmlns:s80="http://www.example.com">s80:ApproveClaim</name>
+          <presentationSubject>Approve the insurance claim for €5000.0 on behalf of milinda Perera</presentationSubject>
+          <presentationName>Approve Claim</presentationName>
+          <status>RESERVED</status>
+          <priority>2</priority>
+          <createdTime>2014-07-30T16:07:43.242+05:30</createdTime>
+        </row>
+        <ns1:pages xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">1</ns1:pages>
+      </ns2:taskSimpleQueryResultSet>
+    </ns2:simpleQueryResponse>
+  </soapenv:Body>
+</soapenv:Envelope>
+
+*/
+		var soapenvNS = new Namespace('http://schemas.xmlsoap.org/soap/envelope/');
+		var ns1NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
+		var ns2NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803');
+		var rowNS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
+
+		var temp = BPSResponseXML..soapenvNS::Body.ns2NS::simpleQueryResponse.ns2NS::taskSimpleQueryResultSet.rowNS::row;
+		log.info('XML EXTRACT : ' +temp);
+		
+		var taskXMLList = BPSResponseXML..soapenvNS::Body.ns2NS::simpleQueryResponse.ns2NS::taskSimpleQueryResultSet.rowNS::row;
+		log.info('taskXMLList length - ' +taskXMLList.length());
+
+		log.info('task1 - ' +taskXMLList[0]);
+
+		//TODO remove this for loop
+		for(var i=0; i < taskXMLList.length(); i++){
+			log.info('TASK ' +i);
+			log.info(taskXMLList[i].toString());
+		}
+
+		var paginatePageCount =  parseInt(BPSResponseXML..soapenvNS::Body.ns2NS::simpleQueryResponse.ns2NS::taskSimpleQueryResultSet.ns1NS::pages);
+
+	}catch(e){
+		log.error(e.toString()); 
+	}
+
+	/*
+	
+	var headers = {"Authorization":"Basic " + auth};
+	var user = "admin";
+	var task = [];
+	var tasks = get( httpUrl + "/bpmnrest/tasks?assignee=" + user + "&sort=id&order=asc&start=" + start + "&size=10" ,null, headers, "json" ).data;
+	for(var i=0; i < tasks.data.length; i++){
+		task.push({
+			id:tasks.data[i].id,
+			name:tasks.data[i].name,
+			date:tasks.data[i].dueDate
+		});
+	}
+	var taskCount = get( httpUrl + "/bpmnrest/tasks?assignee=" + user ,null, headers, "json" ).data.total;
+	var paginatePageCount = parseInt((taskCount / 10));
+	
+	log.info("END : inboxModel");*/
+%>

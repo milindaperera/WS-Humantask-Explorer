@@ -1,0 +1,18 @@
+<%
+	var log = new Log();
+	log.info("START : taskManagerController");
+
+	var authSuccess = session.get("authSuccess");
+	if(!authSuccess){
+		response.sendRedirect("login");
+	} else {
+		include("/model/common.jag");
+		include("/model/taskManagerModel.jag");
+		include("/template/partials/header.jag");
+		include("/template/partials/navigation.jag");
+		include("/template/taskManagerView.jag");
+		include("/template/partials/footer.jag");
+	}
+	
+	log.info("END : taskManagerController");
+%>

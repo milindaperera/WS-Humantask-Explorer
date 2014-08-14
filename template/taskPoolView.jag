@@ -1,0 +1,70 @@
+<%
+	var log = new Log();
+	log.info("START : taskPoolView");
+%>
+<div class="col-sm-12">
+	<ol class="breadcrumb">
+	  <li><a href="#">Home</a></li>
+	  <li class="active">TaskPool</li>
+	</ol>
+	<div class="panel panel-primary">
+	  <!-- Default panel contents -->
+	  <div class="panel-heading">Task Pool</div>
+
+	  <!-- Table -->
+	  <table class="table">
+	    <thead>
+	    	<tr>
+	    		<th>Task ID</th>
+	    		<th>Task Type</th>
+	    		<th>Task Name</th>
+	    		<th>Subject</th>
+	    		<th>Status</th>
+	    		<th>Priority</th>
+	    		<th></th>
+	    	</tr>
+	    </thead>
+	    <tbody>
+	    	<% for(var i=0; i<taskXMLList.length(); i++){ %>
+	    	<tr>
+	    		<td><a href="taskview?id=<%=taskXMLList[i].rowNS::id.text()%>&from=t_pool"><%=taskXMLList[i].rowNS::id.toString()%></a></td>
+	    		<td><%=taskXMLList[i].rowNS::taskType.text()%></td>
+				<td><%=taskXMLList[i].rowNS::presentationName.text()%></td>
+				<td><%=taskXMLList[i].rowNS::presentationSubject%></td>
+				<td><%=taskXMLList[i].rowNS::status%></td>
+				<td><%=taskXMLList[i].rowNS::priority%></td>
+				<td><button onclick="claimTask(<%=taskXMLList[i].rowNS::id.text()%>)" class="btn btn-info">Claim</button></td>
+	    	</tr>
+	    	<% } %>
+	    </tbody>
+	  </table>
+	</div>
+	<ul class="pagination">
+		<% if(pagination != 1){ %>
+			<li><a href="taskpool?pagination=<%=parseInt(pagination)-1%>">&laquo;</a></li>
+		<% } else { %>
+			<li class="disabled"><a href="#">&laquo;</a></li>			
+		<% } %>
+		<% for(var i = 1; i<=paginatePageCount; i++){ 
+				if(pagination == i){ %>
+					<li class="active"><a href="taskpool?pagination=<%=i%>"><%=(""+i).split(".")[0]%></a></li>
+			<% }else { %>
+					<li><a href="taskpool?pagination=<%=i%>"><%=(""+i).split(".")[0]%></a></li>
+			<% } %>
+		<% } %>
+		<% if(pagination != paginatePageCount){ %>
+			<li><a href="taskpool?pagination=<%=parseInt(pagination)+1%>">&raquo;</a></li>
+		<% } else { %>
+			<li class="disabled"><a href="#">&raquo;</a></li>			
+		<% } %>
+	</ul>
+</div>
+
+
+
+<!-- TODO Remove this -->
+<p id="demo">123</p>
+
+<%
+	log.info("END : taskPoolView");
+%>

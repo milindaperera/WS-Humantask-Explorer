@@ -1,0 +1,87 @@
+<div class="col-sm-12">
+	<ol class="breadcrumb">
+	  <li><a href="#">Home</a></li>
+	  
+	  <%
+	  	var currentPage = session.get('currentPage');
+	  	switch (currentPage) {
+	  		case 'inbox':
+	  			var pageName = 'Inbox';
+	  			var pageUrl = 'inbox';
+	  			break;
+	  		case 'taskPool':
+	  			var pageName = 'TaskPool';
+	  			var pageUrl = 'taskpool';
+	  			break;
+	  		default:
+	  			var pageName = 'Unknown';
+	  			var pageUrl = 'inbox';
+	  			break;
+	  	}
+	  	
+	  	
+	  	var taskStatus = taskAbstract.ns1NS::status.text();
+	  	
+	  %>
+	  <li><a href="<%=pageUrl%>"><%=pageName%></a></li>
+	  
+	  
+	  <li class="active">Task : <%=id%></li>
+	</ol>
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	  		Task Abstract : <%=taskAbstract.ns1NS::presentationName.text()%>
+	  		
+	  </div>
+	  <table class="table">
+	    <tbody>
+	    	<tr>
+	    		<th>Subject</th>
+				<td colspan='2'><%=taskAbstract.ns1NS::presentationSubject.text()%></td>
+	    	</tr>
+	    	<tr>
+	    		<th>Description</th>
+				<td colspan='2'><%=taskAbstract.ns1NS::presentationDescription.text()%></td>
+	    	</tr>
+	    	<tr>	
+	    		<th>Summary</th>
+				<td colspan='1'>
+					<p><small><b>Type : </b><%=taskAbstract.ns1NS::taskType.text()%></small></p>
+					<p><small><b>Owner : </b><%=taskAbstract.ns1NS::actualOwner.text()%></small></p>
+					<p><small><b>Created Time &nbsp;&nbsp;&nbsp;: </b><%=taskAbstract.ns1NS::createdTime.text()%></small></p>
+					<p><small><b>Activation Time: </b><%=taskAbstract.ns1NS::activationTime.text()%></small></p>
+					<p><small><b>Last Modified &nbsp;&nbsp;&nbsp;: </b><%=taskAbstract.ns1NS::updatedTime.text()%></small></p>
+				</td>
+				<td colspan='1'>
+					<p><small><b>Status : </b><%=taskAbstract.ns1NS::status.text()%></small></p>
+					<p><small><b>Priority : </b><%=taskAbstract.ns1NS::priority.text()%></small></p>
+				</td>
+				
+	    	</tr>
+
+
+	    	
+	    </tbody>
+	  </table>
+	</div>
+	<div id="taskActionBtns" class="btn-group" align="center">
+	  <%if (taskStatus == 'RESERVED'){%>
+	  		<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>
+	  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>
+	  		<button onclick="suspendTask(<%=id%>)" type="button" class="btn btn-default">Suspend</button>
+	  		<button type="button" class="btn btn-default">Comment</button>
+	  		<button type="button" class="btn btn-default">Assign</button>
+	  <%}else if(taskStatus == 'IN_PROGRESS'){%>
+	  		<button onclick="stopTask(<%=id%>)" type="button" class="btn btn-default">Stop</button>
+	  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>
+	  		<button onclick="suspendTask(<%=id%>)" type="button" class="btn btn-default">Suspend</button>
+	  		<button type="button" class="btn btn-default">Comment</button>
+	  		<button type="button" class="btn btn-default">Assign</button>
+	  		<button type="button" class="btn btn-default">Fail</button>
+	  <%}else if(taskStatus == 'SUSPENDED'){%>
+	  		<button type="button" class="btn btn-default">Resume</button>
+	  		<button type="button" class="btn btn-default">Comment</button>
+	  
+	  <%}%>
+	</div>
+</div>

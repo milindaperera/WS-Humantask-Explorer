@@ -1,0 +1,170 @@
+<%
+	include ("/model/common.jag");
+	
+	var log = new Log();
+	log.info("START : authenticator");
+	
+	var authentication = require("/assets/authentication.js");
+	var username = request.getParameter("username");
+	log.info("username: " + username);
+	
+	var password = request.getParameter("password");
+	log.info("password: " + password);
+
+	log.info('SessionID - ' +session.getId());
+	
+	if(username == "" || password == ""){
+		authSuccess = false;
+	} else{
+		var authSuccess = HTTPAuthenticate(username, password, 'localhost');
+	}
+	log.info("authSuccess : " +authSuccess);
+	
+	if(!authSuccess){
+		session.put("loginFailed" ,true);
+		response.sendRedirect("login");
+	} else {
+		session.put('authSuccess', authSuccess);
+		session.put('userName', username);
+		response.sendRedirect("inbox");
+	}
+	
+	
+	function HTTPAuthenticate(username, password, remoteAddr){
+		var log = new Log();
+		log.info("start HTTP authentication function");
+
+		var httpAuth = new XMLHttpRequest();
+
+		//TODO : Retrieve endpoint from proper config file
+		var endPoint = BPSUrl + '/services/AuthenticationAdmin.AuthenticationAdminHttpsSoap11Endpoint/';
+
+		httpAuth.open('POST', endPoint, false);
+		httpAuth.setRequestHeader('SOAPAction', 'urn:login');
+		httpAuth.setRequestHeader('Content-Type','text/xml');
+
+		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:aut="http://authentication.services.core.carbon.wso2.org">\
+							<soapenv:Header/>\
+								<soapenv:Body>\
+									<aut:login>\
+										<aut:username>' +username +'</aut:username>\
+										<aut:password>' +password +'</aut:password>\
+										<aut:remoteAddress>' +remoteAddr +'</aut:remoteAddress>\
+									</aut:login>\
+							</soapenv:Body>\
+						</soapenv:Envelope>';
+
+		try{
+			httpAuth.send(payload);
+
+			var BPSResponse = httpAuth.responseText;
+			//var BPSResponseXML = httpAuth.responseXML;
+			
+			log.info('RESPONSE:' +httpAuth.responseText.toString());
+			//log.info('return : ' +BPSResponse.toXMLString());
+
+			//log.info('HEADER :' +httpAuth.getAllResponseHeaders());
+			//log.info('return : ' +BPSResponseXML.toXMLString());
+
+			//var tempXML = new XML('<?xml version="1.0" encoding="UTF-8"?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><ns:loginResponse xmlns:ns="http://authentication.services.core.carbon.wso2.org"><ns:return>true</ns:return></ns:loginResponse></soapenv:Body></soapenv:Envelope>');
+			//log.info('XML : ' +tempXML);
+			//log.info('responseXML : ' +BPSResponseXML);
+
+			var returnStart = BPSResponse.indexOf('<ns:return>') + '<ns:return>'.length;
+			var returnEnd = BPSResponse.indexOf('</ns:return>');
+
+			var isLoginSuccess = BPSResponse.substring(returnStart, returnEnd);
+
+			log.info('Success:' +isLoginSuccess);
+
+			if(isLoginSuccess == 'true'){
+				log.info('Login in to BPS Success');
+
+				//retrieve session cookie with BPS and store in session
+				var cookie = httpAuth.getResponseHeader('Set-Cookie').split(';')[0];
+				log.info('Extracted cookie : ' +cookie);
+				log.info('SessionID - ' +session.getId());
+
+				session.put('BPSSessionCookie' , cookie);
+
+				return true;
+
+			}else{
+				log.info('Login in to BPS Failed');
+				return false;
+			}
+
+			
+
+		}catch(e){
+			 log.error(e.toString()); 
+		}
+	}
+
+	//TODO remove this function later
+	function authenticate(username, password, remoteAddr){
+
+		var log = new Log();
+		log.info("start authentication function");
+
+		log.info('SessionID:' +session.getId());
+		log.info('IsNewSession:' +session.isNew());
+
+		var ws = require("ws");
+
+		var authAdmin = new ws.WSRequest();
+
+		log.info('SessionID:' +session.getId());
+		log.info('IsNewSession:' +session.isNew());
+
+		var options = new Array();
+
+		options.useSOAP = 1.1;
+		options.action = "urn:login";
+
+		var payload = '<aut:login xmlns:aut="http://authentication.services.core.carbon.wso2.org">\
+									<aut:username>'+username +'</aut:username><aut:password>' +password +'</aut:password><aut:remoteAddress>' +remoteAddr +'</aut:remoteAddress></aut:login>';
+
+		try{
+			authAdmin.open(options, "https://10.100.5.92:9443/services/AuthenticationAdmin.AuthenticationAdminHttpsSoap11Endpoint/", false);
+			authAdmin.send(payload);
+
+			var result = authAdmin.responseE4X;
+			log.info('result:' +result);
+
+			log.info('complete response :' +authAdmin.readyState);
+
+			log.info('SessionID:' +session.getId());
+			log.info('IsNewSession:' +session.isNew());
+		}catch(e){
+			 log.error(e.toString()); 
+		}
+
+
+		/*var options2 = new Array();
+
+		options2.useSOAP = 1.1;
+		options2.action = "http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/simpleQuery";
+		payload = '<ns:simpleQuery xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803" xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803"><ns:simpleQueryInput><ns1:simpleQueryCategory>ALL_TASKS</ns1:simpleQueryCategory></ns:simpleQueryInput></ns:simpleQuery>';
+      	
+		try{
+			authAdmin.open(options2, "https://10.100.5.92:9443/services/HumanTaskClientAPIAdmin/", false);
+			authAdmin.send(payload);
+
+			var result2 = authAdmin.responseE4X;
+
+			log.info('result:' +result2);
+
+			log.info(session);
+
+			log.info('complete response :' +authAdmin.readyState);
+
+		}catch(e){
+			 log.error(e.toString()); 
+		}*/
+
+
+	}
+
+	log.info("END : authenticator");
+%>

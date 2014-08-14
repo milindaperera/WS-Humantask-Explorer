@@ -1,0 +1,105 @@
+<%
+include("BPSWSRequest.jag");
+
+var id = request.getParameter("id");
+
+log.info('parameter id =' +id);
+
+//requestBPS(endPoint, soapAction, BPSSessionCookie, payload)
+
+var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+				   <soapenv:Header/>\
+				   <soapenv:Body>\
+				      <ns:loadTask>\
+				         <ns:identifier>'+id +'</ns:identifier>\
+				      </ns:loadTask>\
+				   </soapenv:Body>\
+				</soapenv:Envelope>';
+
+var BPSSessionCookie = session.get('BPSSessionCookie');
+
+var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
+
+var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/loadTask';
+
+var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
+
+//defining namespaces
+
+
+log.info('RESULT : ' +result);
+var soapenvNS = new Namespace('http://schemas.xmlsoap.org/soap/envelope/');
+var ns2NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803');
+var ns1NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
+
+var taskAbstract = result.soapenvNS::Body.ns2NS::loadTaskResponse.ns2NS::taskAbstract;
+
+//TODO check and remove this two variables later
+var taskData;
+var formContent;
+
+/*
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+  <soapenv:Body>
+    <ns2:loadTaskResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">
+      <ns2:taskAbstract>
+        <ns1:id xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">2154</ns1:id>
+        <ns1:taskType xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">TASK</ns1:taskType>
+        <ns1:name xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803" xmlns:s59="http://www.example.com">s59:ApproveClaim</ns1:name>
+        <ns1:status xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">RESERVED</ns1:status>
+        <ns1:priority xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">2</ns1:priority>
+        <ns1:taskInitiator xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803"/>
+        <potentialOwners xmlns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">
+          <group>regionalClerksRole</group>
+        </potentialOwners>
+        <businessAdministrators xmlns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">
+          <group>regionalManagerRole</group>
+        </businessAdministrators>
+        <ns1:actualOwner xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">regionalClerkUser2</ns1:actualOwner>
+        <ns1:createdTime xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">2014-07-31T17:27:34.044+05:30</ns1:createdTime>
+        <ns1:updatedTime xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">2014-07-31T17:28:32.441+05:30</ns1:updatedTime>
+        <ns1:activationTime xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">2014-07-31T17:27:34.044+05:30</ns1:activationTime>
+        <ns1:isSkipable xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">false</ns1:isSkipable>
+        <ns1:hasPotentialOwners xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">true</ns1:hasPotentialOwners>
+        <ns1:startByTimeExists xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">false</ns1:startByTimeExists>
+        <ns1:completeByTimeExists xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">false</ns1:completeByTimeExists>
+        <ns1:presentationName xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">Approve Claim</ns1:presentationName>
+        <ns1:presentationSubject xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">Approve the insurance claim for €15000.0 on behalf of Firzan Naqash</ns1:presentationSubject>
+        <ns1:presentationDescription xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">Approve this claim following corporate guideline #4711.0815/7 ...</ns1:presentationDescription>
+        <ns1:renderingMethodExists xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">true</ns1:renderingMethodExists>
+        <ns1:hasOutput xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">false</ns1:hasOutput>
+        <ns1:hasFault xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">false</ns1:hasFault>
+        <ns1:hasAttachments xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">false</ns1:hasAttachments>
+        <ns1:hasComments xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">false</ns1:hasComments>
+        <ns1:escalated xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">false</ns1:escalated>
+        <ns1:hasSubTasks xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">false</ns1:hasSubTasks>
+        <ns1:numberOfAttachments xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">0</ns1:numberOfAttachments>
+        <ns1:previousStatus xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803"/>
+        <ns1:responseServiceName xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">{http://www.example.com/claims/}ClaimsHandlingCallbackPT</ns1:responseServiceName>
+        <ns1:responseOperationName xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">approvalResponse</ns1:responseOperationName>
+        <ns1:packageName xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">ClaimsApprovalTask-1</ns1:packageName>
+        <ns1:tenantId xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">-1234</ns1:tenantId>
+      </ns2:taskAbstract>
+    </ns2:loadTaskResponse>
+  </soapenv:Body>
+</soapenv:Envelope>
+
+*/
+
+
+
+/*var headers = {"Authorization":"Basic " + auth};
+var task = get( httpUrl + "/bpmnrest/task/" + id ,null, headers, "json" ).data;
+var taskData = {
+	name:task.name,
+	desc:task.description,
+	pid:task.processDefinitionId,
+	owner:task.owner,
+	assignee:task.assignee,
+	subtask:task.subtaskList
+};
+var formGenTool = require("/assets/dynamicFormGen.js");
+var formData = get( httpUrl + "/bpmnrest/form/" + id + "/properties" ,null, headers, "json" ).data;
+var formContent = formGenTool.generateForm(formData.data);*/
+%>

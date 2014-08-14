@@ -1,0 +1,17 @@
+<%
+var log = new Log();
+log.info("START : Common jag");
+
+//var httpUrl = "http://localhost:9763";
+var BPSUrl = "https://localhost:9445";
+var data = {
+	title : "WS Humantask Explorer",
+	author: "Milinda Perera",
+	footer: "&copy; 2005 - 2014 WSO2 Inc. All Rights Reserved."
+};
+var encoder = require("/assets/encoder.js");
+//TODO Remove this later
+var auth = encoder.encode("admin:admin");
+
+log.info("END : Common jag");
+%>

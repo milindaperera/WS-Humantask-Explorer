@@ -1,0 +1,18 @@
+<%
+	var log = new Log();
+	log.info("START : inboxController");
+
+	var authSuccess = session.get("authSuccess");
+	if(!authSuccess){
+		response.sendRedirect("login");
+	} else {
+		include("/model/common.jag");
+		include("/model/inboxModel.jag");
+		include("/template/partials/header.jag");
+		include("/template/partials/navigation.jag");
+		include("/template/inboxView.jag");
+		include("/template/partials/footer.jag");
+	}
+	
+	log.info("END : inboxController");
+%>

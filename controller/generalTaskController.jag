@@ -1,0 +1,37 @@
+<%
+	var authSuccess = session.get("authSuccess");
+	if(!authSuccess){
+		response.sendRedirect("login");
+	} else {
+		include("/model/common.jag");
+		include("/model/taskModel.jag");
+		include("/template/partials/header.jag");
+		include("/template/partials/navigation.jag");
+		
+		var user = session.get('userName');
+		if (user == taskAbstract.ns1NS::actualOwner.text()){
+			//This task belongs to this user
+			
+			log.info('LOAD INBOX TASK VIEW');
+			
+			//update current page
+			session.put('currentPage', 'inbox');
+			
+			include("/template/inboxTaskView.jag");
+			
+		}else{
+			//this user is not the actual owner of this task			
+			
+			log.info('LOAD GENERAL TASK VIEW');
+			
+			//update current page
+			session.put('currentPage', 'taskPool');
+			
+			include("/template/taskView.jag");
+		}
+			
+		
+		
+		include("/template/partials/footer.jag");
+	}
+%>

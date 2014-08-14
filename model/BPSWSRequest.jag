@@ -1,0 +1,39 @@
+<%
+
+	function requestBPS(endPoint, soapAction, BPSSessionCookie, payload){
+
+		//get session cookie with BPS
+		//BPSSessionCookie = session.get('BPSSessionCookie');
+
+		//TODO : remove logs
+		log.info('SESSION COOKIE:' +BPSSessionCookie);
+		
+		var httpClient = new XMLHttpRequest();
+
+		//TODO : Retrieve endpoint from proper config file
+		//var endPoint = 'https://localhost:9443/services/HumanTaskClientAPIAdmin/';
+
+		httpClient.open('POST', endPoint, false);
+		httpClient.setRequestHeader('COOKIE', BPSSessionCookie);
+		httpClient.setRequestHeader('SOAPAction', soapAction);
+		httpClient.setRequestHeader('Content-Type','text/xml');
+
+		var BPSResponse = null;
+		try{
+			httpClient.send(payload);
+			BPSResponse = httpClient.responseText;
+			
+			
+
+		}catch(e){
+			log.error(e.toString()); 
+		}
+
+		return BPSResponse;
+	}
+
+
+
+
+
+%>
