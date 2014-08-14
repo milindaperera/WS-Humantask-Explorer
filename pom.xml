@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example.test</groupId>
-  <artifactId>UISampleCode1</artifactId>
+  <artifactId>ws-humantask-explorer</artifactId>
   <version>1.0.0</version>
   <packaging>pom</packaging>
-  <name>UISampleCode1</name>
-  <description>UISampleCode1</description>
+  <name>WS-HumanTask-Explorer</name>
+  <description>WS-HumanTask-Explorer</description>
   <properties>
     <CApp.type>jaggery/app</CApp.type>
   </properties>
