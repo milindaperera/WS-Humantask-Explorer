@@ -8,7 +8,7 @@
 				   data-dismiss="modal" aria-hidden="true">
 				      &times;
 				</button>
-				<h4 class="modal-title" id="addCommentModalLabel">
+				<h4 class="modal-title" id="assignTaskModalLabel">
 				   Assign Task
 				</h4>
 			</div>

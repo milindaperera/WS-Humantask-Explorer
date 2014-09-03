@@ -521,6 +521,11 @@ function updateAttachments(id){
 	document.getElementById('AttchmentsList').style.display = "block";
 	
 	document.getElementById('addComment').style.display = "none";
+	
+	
+	
+	
+	
 }
 
 
