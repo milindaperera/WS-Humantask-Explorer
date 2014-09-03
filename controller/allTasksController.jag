@@ -1,0 +1,20 @@
+<%
+	include("/model/BPSWSRequest.jag");
+	
+	var log = new Log();
+	log.info("START : allTasksController");
+
+	var authSuccess = session.get("authSuccess");
+	if(!authSuccess){
+		response.sendRedirect("login");
+	} else {
+		include("/model/common.jag");
+		include("/model/allTasksModel.jag");
+		include("/template/partials/header.jag");
+		include("/template/partials/navigation.jag");
+		include("/template/allTasksPoolView.jag");
+		include("/template/partials/footer.jag");
+	}
+	
+	log.info("END : allTasksController");
+%>

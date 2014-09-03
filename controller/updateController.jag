@@ -1,0 +1,228 @@
+<%
+	include ("/model/common.jag");
+	include("/model/BPSWSRequest.jag");
+	
+	
+	//TODO remove logs
+	log.info('-------------------requet received');
+	log.info('session check:' +session.get('userName'));
+	log.info(request.getQueryString());
+	var taskId = request.getParameter('tid');
+	var updateType = request.getParameter('type');
+	
+	log.info('task id : ' +taskId);
+	log.info('updateType : ' +updateType);
+	
+	if (updateType == 'update_comments') {
+		//update comments
+		var result = retrieveComments(taskId);
+		
+		log.info('COMMENTS : ' +result);
+		
+		var soapenvNS = new Namespace('http://schemas.xmlsoap.org/soap/envelope/');
+		var ns2NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803');
+		var ns1NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
+
+		log.info('COMMENTS :' +result);
+		log.info('COMMENTS : ' +result.soapenvNS::Body.ns2NS::getCommentsResponse);
+		
+		// possible success responces : 
+		//Without comments: <ns2:getCommentsResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/> 
+		//With comments: <ns2:getCommentsResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">
+		//remove '>' and '/>' from string search to identify success
+		var occurence = result.toXMLString().indexOf('<ns2:getCommentsResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"');
+
+		if (occurence < 0){
+			var responseMsg =  '<update_commentsResponse>\
+									<success>false</success>\
+									<data>' +result.soapenvNS::Body +'</data>\
+								</update_commentsResponse>';
+		}else{
+			//comment retrieval success
+			var responseMsg =  '<update_commentsResponse>\
+									<success>true</success>\
+									<data>' +result.soapenvNS::Body.ns2NS::getCommentsResponse +'</data>\
+								</update_commentsResponse>';
+		} 
+
+		response.contentType = 'text/xml';
+		response.content = responseMsg;
+		
+		
+	}else if (updateType == 'update_history'){
+		
+		//update History
+		var result = retrieveHistory(taskId);
+		
+		var soapenvNS = new Namespace('http://schemas.xmlsoap.org/soap/envelope/');
+		var ns2NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803');
+		var ns1NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
+		
+		var occurence = result.toXMLString().indexOf('<ns2:loadTaskEventsResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">');
+
+		if (occurence < 0){
+			var responseMsg =  '<update_historyResponse>\
+									<success>false</success>\
+									<data>' +result.soapenvNS::Body +'</data>\
+								</update_historyResponse>';
+		}else{
+			//comment retrieval success
+			var responseMsg =  '<update_historyResponse>\
+									<success>true</success>\
+									<data>' +result.soapenvNS::Body.ns2NS::loadTaskEventsResponse +'</data>\
+								</update_historyResponse>';
+		} 
+
+		response.contentType = 'text/xml';
+		response.content = responseMsg;
+		
+		/*
+		 * SUCCESS
+		 	<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+			   <soapenv:Body>
+			      <ns2:loadTaskEventsResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">
+			         <ns2:taskEvents>
+			            <event xmlns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">
+			               <eventId>11208</eventId>
+			               <eventType>addcomment</eventType>
+			               <eventInitiator>regionalClerkUser2</eventInitiator>
+			               <oldState>IN_PROGRESS</oldState>
+			               <newState>IN_PROGRESS</newState>
+			               <eventDetail/>
+			               <eventTime>2014-08-22T17:41:53.293+05:30</eventTime>
+			            </event>
+			            <event xmlns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">
+			               <eventId>11209</eventId>
+			               <eventType>addcomment</eventType>
+			               <eventInitiator>regionalClerkUser2</eventInitiator>
+			               <oldState>IN_PROGRESS</oldState>
+			               <newState>IN_PROGRESS</newState>
+			               <eventDetail/>
+			               <eventTime>2014-08-22T17:42:15.270+05:30</eventTime>
+			            </event>
+			         </ns2:taskEvents>
+			      </ns2:loadTaskEventsResponse>
+			   </soapenv:Body>
+			</soapenv:Envelope>
+			*/
+	}else if (updateType == 'update_assignableUsers'){
+		
+		//retrive assignable user list
+		var result = retrieveAssignableUserList(taskId);
+		
+		log.info('*********************************************RESULT : ' +result);
+		
+		var soapenvNS = new Namespace('http://schemas.xmlsoap.org/soap/envelope/');
+		var ns2NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803');
+		
+		var resultCheck = result.soapenvNS::Body.ns2NS::getAssignableUserListResponse;
+		
+		if (resultCheck.length() > 0){
+			//comment retrieval success
+			var responseMsg =  '<update_historyResponse>\
+									<success>true</success>\
+									<data>' +result.soapenvNS::Body.ns2NS::getAssignableUserListResponse +'</data>\
+								</update_historyResponse>';			
+			log.info('********************************************* length = ' + resultCheck.length());
+		}else{
+			var responseMsg =  '<update_historyResponse>\
+									<success>false</success>\
+									<data>' +result.soapenvNS::Body +'</data>\
+								</update_historyResponse>';
+			log.info('llllllllllllllllllllllllllllllllllllllllllllllllll length = ' + resultCheck.length());
+		} 
+
+		response.contentType = 'text/xml';
+		response.content = responseMsg;
+		
+		/*
+		 * SUCCESS
+		 * <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+			   <soapenv:Body>
+			      <ns2:getAssignableUserListResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">
+			         <ns2:user>regionalClerkUser</ns2:user>
+			         <ns2:user>regionalClerkUser2</ns2:user>
+			      </ns2:getAssignableUserListResponse>
+			   </soapenv:Body>
+			</soapenv:Envelope>
+			
+			FAILURE
+			
+		*/
+	}
+	
+	
+	
+	
+	function retrieveComments(id){
+		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+										xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+						   <soapenv:Header/>\
+						   <soapenv:Body>\
+						      <ns:getComments>\
+						         <ns:identifier>'+id +'</ns:identifier>\
+						      </ns:getComments>\
+						   </soapenv:Body>\
+						</soapenv:Envelope>';
+		
+		var BPSSessionCookie = session.get('BPSSessionCookie');
+				
+		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
+		
+		var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/getComments';
+		
+		var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
+		
+		return result;
+	}
+	
+	
+	
+	function retrieveHistory(id){
+		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+									xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+						   <soapenv:Header/>\
+						   <soapenv:Body>\
+						      <ns:loadTaskEvents>\
+						         <ns:identifier>'+id +'</ns:identifier>\
+						      </ns:loadTaskEvents>\
+						   </soapenv:Body>\
+						</soapenv:Envelope>';
+		
+		var BPSSessionCookie = session.get('BPSSessionCookie');
+						
+		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
+		
+		var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/loadTaskEvents';
+		
+		var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
+		
+		return result;
+	}
+	
+	
+	function retrieveAssignableUserList(id){
+		
+		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+										xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+								   <soapenv:Header/>\
+								   <soapenv:Body>\
+								      <ns:getAssignableUserList>\
+								         <ns:identifier>'+id +'</ns:identifier>\
+								      </ns:getAssignableUserList>\
+								   </soapenv:Body>\
+								</soapenv:Envelope>';
+		
+		var BPSSessionCookie = session.get('BPSSessionCookie');
+								
+		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
+		
+		var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/getAssignableUserList';
+		
+		var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
+		
+		return result;
+		
+	}
+	
+%>
