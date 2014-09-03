@@ -649,11 +649,14 @@ function assignTaskModalUpdate(id){
 					}
 					
 					document.getElementById('assignableUserList').innerHTML = userListDisplay;
+					document.getElementById('taskAssignBtn').removeAttribute('disabled');
+					document.getElementById('userUnavailableAlert').style.display = "none";
 					
 				}else{
 					//no users available to assign
-					//TODO : Display no users available
-					//TODO : dissable Assign button
+					document.getElementById('assignableUserList').innerHTML = userListDisplay;
+					document.getElementById('taskAssignBtn').setAttribute('disabled','disabled');
+					document.getElementById('userUnavailableAlert').style.display = "block";
 				}
 				//show modal
 				$('#assignTaskModal').modal();
@@ -667,10 +670,7 @@ function assignTaskModalUpdate(id){
         	//TODO : Display error reason
         	alert('Failed : ERROR OCCURED');
     	}
-	});
-	
-	
-	
+	});	
 	
 }
 
