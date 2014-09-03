@@ -2,13 +2,15 @@
 	log.info("START : inboxModel");
 	
 	//retrieving parameters
-	var pagination = request.getParameter("pagination");
+	var paginationStr = request.getParameter("pagination");
 	var statusQuery = request.getParameter("status_query");
 	
-	log.info("pagination : " + pagination);
+	log.info("pagination : " + paginationStr);
 	
-	if (pagination == null || pagination == ""){
-		pagination = 1;
+	if (paginationStr == null || paginationStr == ""){
+		var pagination = 1;
+	}else{
+		var pagination = parseInt(paginationStr);
 	}
 	
 	var pageSize = 10;
@@ -89,6 +91,8 @@
 		var ns2NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803');
 		var rowNS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
 
+		
+		//TODO remove following 2 lines
 		var temp = BPSResponseXML..soapenvNS::Body.ns2NS::simpleQueryResponse.ns2NS::taskSimpleQueryResultSet.rowNS::row;
 		log.info('XML EXTRACT : ' +temp);
 		

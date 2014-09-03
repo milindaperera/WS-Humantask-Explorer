@@ -38,6 +38,26 @@ var taskAbstract = result.soapenvNS::Body.ns2NS::loadTaskResponse.ns2NS::taskAbs
 var taskData;
 var formContent;
 
+
+//retrieve comments
+var payload4Comments = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+										xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+						   <soapenv:Header/>\
+						   <soapenv:Body>\
+						      <ns:getComments>\
+						         <ns:identifier>'+id +'</ns:identifier>\
+						      </ns:getComments>\
+						   </soapenv:Body>\
+						</soapenv:Envelope>';
+var soapAction4Comments = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/getComments';
+var commentResults = new XML(requestBPS(endPoint, soapAction4Comments, BPSSessionCookie, payload4Comments));
+
+log.info('COMMENT RESULT :' +commentResults);
+
+var commentList = commentResults.soapenvNS::Body.ns2NS::getCommentsResponse.ns2NS::comment;
+
+log.info('COMMENT 01 :' +commentList[0]);
+
 /*
 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
@@ -87,7 +107,30 @@ var formContent;
 
 */
 
-
+/*
+ <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <soapenv:Body>
+      <ns2:getCommentsResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">
+         <ns2:comment>
+            <ns1:id xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">10751</ns1:id>
+            <ns1:addedTime xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">2014-08-19T10:48:18.088+05:30</ns1:addedTime>
+            <ns1:addedBy xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">regionalClerkUser2</ns1:addedBy>
+            <ns1:lastModifiedTime xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">2014-08-19T10:48:18.088+05:30</ns1:lastModifiedTime>
+            <ns1:lastModifiedBy xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">regionalClerkUser2</ns1:lastModifiedBy>
+            <ns1:text xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">ssadsad</ns1:text>
+         </ns2:comment>
+         <ns2:comment>
+            <ns1:id xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">10752</ns1:id>
+            <ns1:addedTime xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">2014-08-19T15:28:02.606+05:30</ns1:addedTime>
+            <ns1:addedBy xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">regionalClerkUser2</ns1:addedBy>
+            <ns1:lastModifiedTime xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">2014-08-19T15:28:02.606+05:30</ns1:lastModifiedTime>
+            <ns1:lastModifiedBy xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">regionalClerkUser2</ns1:lastModifiedBy>
+            <ns1:text xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">sadasdasdsadsa</ns1:text>
+         </ns2:comment>
+      </ns2:getCommentsResponse>
+   </soapenv:Body>
+</soapenv:Envelope>
+  */
 
 /*var headers = {"Authorization":"Basic " + auth};
 var task = get( httpUrl + "/bpmnrest/task/" + id ,null, headers, "json" ).data;
@@ -103,3 +146,8 @@ var formGenTool = require("/assets/dynamicFormGen.js");
 var formData = get( httpUrl + "/bpmnrest/form/" + id + "/properties" ,null, headers, "json" ).data;
 var formContent = formGenTool.generateForm(formData.data);*/
 %>
+
+
+
+
+

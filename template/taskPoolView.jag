@@ -2,11 +2,14 @@
 	var log = new Log();
 	log.info("START : taskPoolView");
 %>
-<div class="col-sm-12">
+<div class="row">
 	<ol class="breadcrumb">
 	  <li><a href="#">Home</a></li>
 	  <li class="active">TaskPool</li>
 	</ol>
+</div>
+
+<div class="row">	
 	<div class="panel panel-primary">
 	  <!-- Default panel contents -->
 	  <div class="panel-heading">Task Pool</div>
@@ -15,8 +18,8 @@
 	  <table class="table">
 	    <thead>
 	    	<tr>
-	    		<th>Task ID</th>
-	    		<th>Task Type</th>
+	    		<th>ID</th>
+	    		<th>Type</th>
 	    		<th>Task Name</th>
 	    		<th>Subject</th>
 	    		<th>Status</th>
@@ -59,7 +62,6 @@
 		<% } %>
 	</ul>
 </div>
-
 
 
 <!-- TODO Remove this -->

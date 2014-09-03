@@ -1,5 +1,5 @@
 <%
-	log.info("START : inboxModel");
+	log.info("START : taskPoolModel");
 	
 	//update current page
 	session.put('currentPage', 'taskPool');

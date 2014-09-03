@@ -7,6 +7,8 @@
 		include("/model/taskModel.jag");
 		include("/template/partials/header.jag");
 		include("/template/partials/navigation.jag");
+		include("/template/modals/addCommentModal.jag");
+		include("/template/modals/assignTaskModal.jag");
 		
 		var user = session.get('userName');
 		
@@ -19,7 +21,7 @@
 			
 			include("/template/inboxTaskView.jag");
 			
-		}else{
+		} else {
 			log.info('LOAD GENERAL TASK VIEW');
 			
 			//update current page

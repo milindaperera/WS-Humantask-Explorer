@@ -215,11 +215,11 @@
 		
 		if(occurence < 0){
 			//start unsuccessfull
-			var responseMsg = '<suspend_taskResponse><success>false</success></suspend_taskResponse>';
+			var responseMsg = '<resume_taskResponse><success>false</success></resume_taskResponse>';
 			
 		}else{
 			//start successfull
-			var responseMsg = '<suspend_taskResponse><success>true</success></suspend_taskResponse>';
+			var responseMsg = '<resume_taskResponse><success>true</success></resume_taskResponse>';
 			//TODO decide whether to redirect to inboxTask instead of response
 		}
 		
@@ -256,11 +256,11 @@
 		
 		if(occurence < 0){
 			//start unsuccessfull
-			var responseMsg = '<suspend_taskResponse><success>false</success></suspend_taskResponse>';
+			var responseMsg = '<fail_taskResponse><success>false</success></fail_taskResponse>';
 			
 		}else{
 			//start successfull
-			var responseMsg = '<suspend_taskResponse><success>true</success></suspend_taskResponse>';
+			var responseMsg = '<fail_taskResponse><success>true</success></fail_taskResponse>';
 			//TODO decide whether to redirect to inboxTask instead of response
 		}
 		
@@ -287,6 +287,135 @@
 			   </soapenv:Body>
 			</soapenv:Envelope>
 
+			*/
+	}else if (actionType == "addComment_task"){
+		
+		//retrieve payload
+		//format of request : <addComment><text>Comment</text></addComment>
+		//the Comment contains text data wrapped by <![CDATA[ text content ]]
+		var requestPayload = XML(request.getContent());
+		
+		log.info('COMMENT REQUEST PAYLOAD : ' +requestPayload.text);
+
+		//need to rewrap text content by CDATA 
+		var result = addComment(taskId, '<![CDATA[' +requestPayload.text +']]>');
+		
+		log.info('COMMENT RESPONSE :' +result);
+		
+		var occurence = result.toXMLString().indexOf('<ns2:addCommentResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">');
+		
+		if(occurence < 0){
+			//start unsuccessfull
+			var responseMsg = '<addComment_taskResponse><success>false</success></addComment_taskResponse>';
+			
+		}else{
+			//start successfull
+			var responseMsg = '<addComment_taskResponse><success>true</success></addComment_taskResponse>';
+			//TODO decide whether to redirect to inboxTask instead of response
+		}
+		
+		response.contentType = 'text/xml';
+		response.content = responseMsg;
+				
+		/*
+		 SUCCESS RESPONSE
+		 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+			   <soapenv:Body>
+			      <ns2:addCommentResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">
+			         <ns2:commentID>11051</ns2:commentID>
+			      </ns2:addCommentResponse>
+			   </soapenv:Body>
+			</soapenv:Envelope>
+			
+		FAILED RESPONSE
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+		   <soapenv:Body>
+		      <soapenv:Fault>
+		         <faultcode>soapenv:Server</faultcode>
+		         <faultstring>Task lookup failed for task id 825 invalid task id provide</faultstring>
+		         <detail/>
+		      </soapenv:Fault>
+		   </soapenv:Body>
+		</soapenv:Envelope>
+		 */
+	}else if (actionType == "deleteComment"){
+		var result = deleteComment(taskId, request.getParameter('commentId'));
+		
+		log.info('COMMENT DELETE RESPONSE :' +result);
+		
+		var occurence = result.toXMLString().indexOf('<ns2:deleteCommentResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>');
+				
+		if(occurence < 0){
+			//start unsuccessfull
+			var responseMsg = '<deleteComment_Response><success>false</success></deleteComment_Response>';
+			
+		}else{
+			//start successfull
+			var responseMsg = '<deleteComment_Response><success>true</success></deleteComment_Response>';
+		}
+		
+		response.contentType = 'text/xml';
+		response.content = responseMsg;
+		/* SUCCESS :
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+		   <soapenv:Body>
+		      <ns2:deleteCommentResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>
+		   </soapenv:Body>
+		</soapenv:Envelope> 
+		
+			FAILURE:
+			
+		*/
+		
+	}else if (actionType == "assign_task"){
+		
+		var userName = request.getParameter('assignee');
+		
+		var result = assignTask(taskId, userName);
+		
+		log.info('ASSIGN TASK RESPONSE :' +result);
+		
+		log.info('*********************************************RESULT : ' +result);
+				
+		var soapenvNS = new Namespace('http://schemas.xmlsoap.org/soap/envelope/');
+		var ns2NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803');
+		
+		var resultCheck = result.soapenvNS::Body.ns2NS::delegateResponse;
+		
+		if (resultCheck.length() > 0){
+			//comment retrieval success
+			var responseMsg =  '<assign_taskResponse>\
+									<success>true</success>\
+								</assign_taskResponse>';			
+			log.info('********************************************* length = ' + resultCheck.length());
+		}else{
+			var responseMsg =  '<assign_taskResponse>\
+									<success>false</success>\
+									<data>' +result.soapenvNS::Body +'</data>\
+								</assign_taskResponse>';
+			log.info('llllllllllllllllllllllllllllllllllllllllllllllllll length = ' + resultCheck.length());
+		} 
+
+		response.contentType = 'text/xml';
+		response.content = responseMsg;
+		
+		/*
+		 * SUCCESS:
+		 	<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+			   <soapenv:Body>
+			      <ns2:delegateResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"/>
+			   </soapenv:Body>
+			</soapenv:Envelope>
+		 * FAILURE:
+		 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+			   <soapenv:Body>
+			      <soapenv:Fault>
+			         <faultcode>soapenv:Server</faultcode>
+			         <faultstring>The task[id:3507] can be only delegated after it's released. But for the task to be released you need to be a business administrator or the actual owner of the task. Given user[regionalClerkUser2] is not in those roles!</faultstring>
+			         <detail/>
+			      </soapenv:Fault>
+			   </soapenv:Body>
+			</soapenv:Envelope>
 			*/
 	}
 	
@@ -461,4 +590,85 @@
 		
 		return result;
 	}
+	
+	
+	function addComment(id, text){
+		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+									xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+						   <soapenv:Header/>\
+						   <soapenv:Body>\
+						      <ns:addComment>\
+						         <ns:identifier>'+id +'</ns:identifier>\
+						         <ns:text>'+text +'</ns:text>\
+						      </ns:addComment>\
+						   </soapenv:Body>\
+						</soapenv:Envelope>';
+		
+		var BPSSessionCookie = session.get('BPSSessionCookie');
+				
+		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
+		
+		var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/addComment';
+		
+		var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
+		
+		return result;
+		
+	}
+	
+	
+	function deleteComment(taskId, commentId){
+		
+		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+							xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+						   <soapenv:Header/>\
+						   <soapenv:Body>\
+						      <ns:deleteComment>\
+						         <ns:taskIdentifier>'+taskId +'</ns:taskIdentifier>\
+						         <ns:commentIdentifier>'+commentId +'</ns:commentIdentifier>\
+						      </ns:deleteComment>\
+						   </soapenv:Body>\
+						</soapenv:Envelope>';
+		
+		var BPSSessionCookie = session.get('BPSSessionCookie');
+						
+		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
+		
+		var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/deleteComment';
+		
+		var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
+		
+		return result;
+	}
+	
+	
+	//function to assign task (delegate)
+	function assignTask(id, userName){
+		
+		var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+								xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"\
+								xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">\
+						   <soapenv:Header/>\
+						   <soapenv:Body>\
+						      <ns:delegate>\
+						         <ns:identifier>'+id +'</ns:identifier>\
+						         <ns:organizationalEntity>\
+						            <ns1:user>'+userName +'</ns1:user>\
+						         </ns:organizationalEntity>\
+						      </ns:delegate>\
+						   </soapenv:Body>\
+						</soapenv:Envelope>';
+		
+		var BPSSessionCookie = session.get('BPSSessionCookie');
+								
+		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
+		
+		var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/delegate';
+		
+		var result = new XML(requestBPS(endPoint, soapAction, BPSSessionCookie, payload));
+		
+		return result;
+	}
+	
+	
 %>

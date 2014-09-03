@@ -1,4 +1,4 @@
-<div class="col-sm-12">
+<div class="row">
 	<ol class="breadcrumb">
 	  <li><a href="#">Home</a></li>
 	  
@@ -24,10 +24,16 @@
 	  
 	  <li class="active">Task : <%=id%></li>
 	</ol>
+</div>
+
+<div class="row">
+	
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	  		Task Abstract : <%=taskAbstract.ns1NS::presentationName.text()%>
-	  		<span><button  onclick="claimTask(<%=id%>)" class="btn btn-xs btn-danger" style="float:right;">Claim</button></span>
+	  		<%if (taskAbstract.ns1NS::status.text() == "READY" || taskAbstract.ns1NS::status.text() == "CREATED"){%>
+	  			<span><button  onclick="claimTask(<%=id%>)" class="btn btn-xs btn-danger" style="float:right;">Claim</button></span>
+	  		<%}%>
 	  </div>
 	  <table class="table">
 	    <tbody>
@@ -58,40 +64,55 @@
 	    </tbody>
 	  </table>
 	</div>
-	<div class="modal fade" id="transfer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog model-center">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Transfer Task</h4>
-                </div>
-                <div class="modal-body">
-                    Username <input type="textbox" id="transferName"/><br>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="transfer($('#transferName').val(), <%=id%>);">Save</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    <div class="modal fade" id="reassign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog model-center">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Reassign Task</h4>
-                </div>
-                <div class="modal-body">
-                    Username <input type="textbox" id="reassignName"/><br>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="reassign($('#reassignName').val(), <%=id%>);">Save</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 </div>
 
+
+<div class="row" name="additionalInfoSection">
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="active" id="commentTab">
+			<a href="#additionalInfoSection" onclick="updateComments(<%=id%>)">
+				Comments
+				<span class="glyphicon glyphicon-comment"></span>
+			</a>
+		</li>
+		<li id="historyTab">
+			<a href="#additionalInfoSection" onclick="updateHistory(<%=id%>)">History</a>
+		</li>
+		<li id="attachmentTab">
+			<a href="#additionalInfoSection" onclick="updateAttachments(<%=id%>)">Attachments</a>
+		</li>
+		
+		<li id="addComment" style="float:right;">
+			<a href="#additionalInfoSection" data-toggle="modal" data-target="#addCommentModal">
+				<span class="glyphicon glyphicon-plus"></span>
+			</a>
+		</li>
+	</ul>
+
+	<ul class="list-group" id="commentList">
+		<%for (var i=0; i < commentList.length(); i++){%>
+			<li class="list-group-item">
+				<div><%=commentList[i].ns1NS::addedBy.text()%> added a comment - 
+					<time id="time">
+						<script>
+							var d = new Date("<%=commentList[i].ns1NS::addedTime.text()%>");
+							document.write(d);
+						</script>
+					</time>
+				</div>
+				<div><%=commentList[i].ns1NS::text.text()%></div>
+			</li>
+		<%}%>
+	</ul>
+	
+	<ul class="list-group" id="historyList" hidden>
+		<li class="list-group-item">not implemented !</li>
+	</ul>
+	
+	<ul class="list-group" id="AttchmentsList" hidden>
+		<li class="list-group-item">not implemented !</li>
+	</ul>
+</div>
+
+<!-- TODO : remove following tag -->
 <p id="demo">123</p>
