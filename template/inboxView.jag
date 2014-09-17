@@ -47,8 +47,9 @@
 				    </thead>
 				    <tbody>
 				    	<% for(var i=0; i<taskXMLList.length(); i++){ %>
-				    	<tr>
-				    		<td><a href="inboxtask?id=<%=taskXMLList[i].rowNS::id.toString()%>"><%=taskXMLList[i].rowNS::id.toString()%></a></td>
+				    	<tr style="cursor:pointer;" onclick="window.location='inboxtask?id=<%=taskXMLList[i].rowNS::id.toString()%>'"
+				    		onmouseover="this.style.backgroundColor='#F5F5F5';" onmouseout="this.style.backgroundColor='';">
+				    		<td><%=taskXMLList[i].rowNS::id.toString()%></td>
 				    		<td><%=taskXMLList[i].rowNS::taskType.text()%></td>
 							<td><%=taskXMLList[i].rowNS::presentationName.text()%></td>
 							<td><%=taskXMLList[i].rowNS::presentationSubject%></td>

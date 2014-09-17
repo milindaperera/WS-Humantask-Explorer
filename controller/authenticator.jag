@@ -26,6 +26,14 @@
 	} else {
 		session.put('authSuccess', authSuccess);
 		session.put('userName', username);
+		
+		//TODO REMOVE TEST SEGMENT test BEGIN
+		//var tempCookie = session.get('BPSSessionCookie');
+		//var cookie= {'name':'test','value':tempCookie};
+		//response.addCookie(cookie)
+		//response.addHeader('Set-Cookie', tempCookie + "; Path=/; Secure; HttpOnly");
+		//response.addHeader('Set-Cookie', "requestedURI=../../attachment-mgt/download/ej4lv9jl2pc7o833f0c43j39po; Path=/");
+		//test END
 		response.sendRedirect("inbox");
 	}
 	

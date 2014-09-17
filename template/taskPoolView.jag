@@ -36,7 +36,7 @@
 				<td><%=taskXMLList[i].rowNS::presentationSubject%></td>
 				<td><%=taskXMLList[i].rowNS::status%></td>
 				<td><%=taskXMLList[i].rowNS::priority%></td>
-				<td><button onclick="claimTask(<%=taskXMLList[i].rowNS::id.text()%>)" class="btn btn-info">Claim</button></td>
+				<td><button onclick="claimTask(<%=taskXMLList[i].rowNS::id.text()%>)" class="btn btn-xs btn-info">Claim</button></td>
 	    	</tr>
 	    	<% } %>
 	    </tbody>

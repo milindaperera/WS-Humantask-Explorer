@@ -1,0 +1,42 @@
+<%
+
+	//TODO Not finished yet ... 
+	
+	var log = new Log();
+
+	log.info('attachment-mgt');
+
+	//var url = "https://10.100.5.92:9443/attachment-mgt/download/ej4lv9jl2pc7o833f0c43j39po";
+
+	//var headers = {"Cookie": session.get('BPSSessionCookie')};
+	var headers = {"Cookie": "requestedURI=../../attachment-mgt/download/ej4lv9jl2pc7o833f0c43j39po; JSESSIONID=2C817924635DAD6C409A554D62ABF4E3"};
+	var data = {};
+
+	var url = "https://10.100.5.92:9448/attachment-mgt/download/ej4lv9jl2pc7o833f0c43j39po";
+	//var twitterJson = get(url, data, headers, "*/*");
+
+	log.info(session.get('BPSSessionCookie'));
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", url);
+	xhr.setRequestHeader("Cookie" , "JSESSIONID=E9C9E7816AC4F7ED3815A54DD13B3561");
+	xhr.send();
+
+	log.info(xhr.getAllResponseHeaders());
+	log.info(	response = xhr.status);
+	//log.info(typeof twitterJson);
+	//log.info(twitterJson.status);
+	//print(twitterJson);
+
+	url2 = "https://10.100.5.92:9448/carbon/admin/login_action.jsp";
+	//xhr.setRequestHeader("Cookie" , "JSESSIONID=C5BF43B3A50C2EE1860A559AEB8F6648");
+	
+
+	var xhr2 = new XMLHttpRequest();
+
+	xhr2.open("POST", url2);
+	xhr2.setRequestHeader("Content-Type" , "application/x-www-form-urlencoded");
+	xhr2.send("username=regionalClerkUser&password=0714115032");
+
+	log.info(xhr2.getAllResponseHeaders());
+
+%>

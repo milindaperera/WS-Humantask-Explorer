@@ -523,8 +523,62 @@ function updateAttachments(id){
 	document.getElementById('addComment').style.display = "none";
 	
 	
+	var requestUrl = "/"+ appName + "/update?type=update_attachments&tid=" +id;
 	
 	
+	$.ajax({
+		type:'POST',
+		url: httpUrl + requestUrl,
+		success: function(data){	
+			
+			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
+			
+			console.log('Response : ' + data);
+			
+			if (success == 'true'){
+				//successful				
+				var ns1NS = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803';
+				var ns2NS = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803';
+				var attachmentList = data.firstChild.getElementsByTagNameNS(ns2NS,'info');
+				
+				var attachmentViewList = new String();
+				
+				//TODO : remove logs
+				console.log('attachments = ' +attachmentList.length);
+				
+				for (var i = 0; i < attachmentList.length; i++) {
+					console.log(attachmentList[i].getElementsByTagNameNS(ns1NS,'name')[0].textContent);
+					
+					var dateInfo = new Date(attachmentList[i].getElementsByTagNameNS(ns1NS,'attachedTime')[0].textContent);
+					
+					attachmentViewList = attachmentViewList + 	'<li class="list-group-item" id="attachment_' + attachmentList[i].getElementsByTagNameNS(ns1NS,'identifier')[0].textContent +'">'
+																		+'<div>' 
+																		+attachmentList[i].getElementsByTagNameNS(ns1NS,'name')[0].textContent 
+																		+'<a href="' +attachmentList[i].getElementsByTagNameNS(ns1NS,'identifier')[0].textContent 
+																						+'" class="btn btn-link btn-xs" role="button" style="float:right;">'
+																	      	+'Download'
+																	   	+'</a>'
+																	+'</div>'
+																	+'<div style="color:#B0B0B0;">' 
+																		+'added by '+attachmentList[i].getElementsByTagNameNS(ns1NS,'attachedBy')[0].textContent 
+																		+' on <time>'+dateInfo +'</time>'
+																	+'</div>'
+																+'</li>';	
+				}
+				
+				
+				document.getElementById('AttchmentsList').innerHTML = attachmentViewList;
+				
+			}else{
+				//unsuccessful
+				alert("Unable to ADDCOMMENT the task : " +id);
+			}
+        },
+        error:function(response){
+        	alert('Failed : ERROR OCCURED : ' +response);
+    	}
+		
+	});
 	
 }
 
