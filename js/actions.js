@@ -1,25 +1,34 @@
-var httpUrl = location.protocol + "//" + location.host;
+/*
+ * Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+//TODO change to window.location
+var httpUrl = window.location.protocol + "//" + window.location.host;
 var appName = "WS-Humantask-Explorer"; //TODO finalize appName
 
 function claimTask(id){
 
-	//TODO update to proper url [UISampleCode1_1]
 	var requestUrl = "/"+ appName +"/action?type=claim_task&tid=" +id;
-	//document.getElementById("demo").innerHTML = requestUrl;
-	
-	
-	
+
 	$.ajax({
-		
 		type: 'POST',
 		url: httpUrl + requestUrl,
-		success: function(data){
-        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
-			//document.getElementById("demo").innerHTML = data;
-			document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
+		success: function(data){	
+			var success = data.firstChild.getElementsByTagName('success')[0].textContent;			
 			if (success == 'true'){
 				//successful
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id=" +id;
@@ -27,36 +36,22 @@ function claimTask(id){
 				//unsuccessful
 				alert("Unable to claim the task : " +id);
 			}
-        }
-		
+        }		
 	});
 }
 
 
 
 function startTask(id) {
-	//TODO update to proper url [UISampleCode1_1]
 	var requestUrl = "/"+ appName +"/action?type=start_task&tid=" +id;
-	//document.getElementById("demo").innerHTML = requestUrl;
-	
-	
-	
-	$.ajax({
-		
+
+	$.ajax({		
 		type: 'POST',
 		url: httpUrl + requestUrl,
-		success: function(data){
-        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
-			//document.getElementById("demo").innerHTML = data;
-			//document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-						
+		success: function(data){			
+			var success = data.firstChild.getElementsByTagName('success')[0].textContent;					
 			if (success == 'true'){
 				//successful
-				//window.location=httpUrl+"/UISampleCode1_1/inboxtask?id=" +id;
-
 				//TODO : decide whether to remove this or not
 				document.getElementById('taskActionBtns').innerHTML = '<button  onclick="stopTask(<%=id%>)" type="button" class="btn btn-default">Stop</button>\
 																  		<button type="button" class="btn btn-default">Release</button>\
@@ -65,10 +60,7 @@ function startTask(id) {
 																  		<button type="button" class="btn btn-default">Assign</button>\
 																  		<button type="button" class="btn btn-default">Fail</button>';
 				alert("Task Start success : " +id);
-
-				//TODO update to proper url [UISampleCode1_1]
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
-
 			}else{
 				//unsuccessful
 				alert("Unable to start the task : " +id);
@@ -81,28 +73,17 @@ function startTask(id) {
 
 
 function stopTask(id){
-
-	//TODO update to proper url [UISampleCode1_1]
 	var requestUrl = "/"+ appName +"/action?type=stop_task&tid=" +id;
-	//document.getElementById("demo").innerHTML = requestUrl;
-	
-	
-	
+
 	$.ajax({
 		
 		type: 'POST',
 		url: httpUrl + requestUrl,
 		success: function(data){
-        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
-			//document.getElementById("demo").innerHTML = data;
-			//document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
 			
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-						
 			if (success == 'true'){
 				//successful
-				//window.location=httpUrl+"/UISampleCode1_1/inboxtask?id=" +id;
 				//TODO : decide whether to remove this or not
 				document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button type="button" class="btn btn-default">Release</button>\
@@ -110,8 +91,6 @@ function stopTask(id){
 																  		<button type="button" class="btn btn-default">Comment</button>\
 																  		<button type="button" class="btn btn-default">Assign</button>';
 				alert("Task Start success : " +id);
-
-				//TODO update to proper url [UISampleCode1_1]
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 
 			}else{
@@ -119,7 +98,6 @@ function stopTask(id){
 				alert("Unable to start the task : " +id);
 			}
         }
-		
 	});
 
 }
@@ -127,27 +105,16 @@ function stopTask(id){
 
 
 function releaseTask (id) {
-	//TODO update to proper url [UISampleCode1_1]
 	var requestUrl = "/"+ appName +"/action?type=release_task&tid=" +id;
-	//document.getElementById("demo").innerHTML = requestUrl;
-	
-	
 	
 	$.ajax({
-		
 		type: 'POST',
 		url: httpUrl + requestUrl,
 		success: function(data){
-        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
-			//document.getElementById("demo").innerHTML = data;
-			//document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-						
+
+			var success = data.firstChild.getElementsByTagName('success')[0].textContent;	
 			if (success == 'true'){
 				//successful
-				//window.location=httpUrl+"/UISampleCode1_1/inboxtask?id=" +id;
 				//TODO : decide whether to remove this or not
 				document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
@@ -155,8 +122,6 @@ function releaseTask (id) {
 																  		<button type="button" class="btn btn-default">Comment</button>\
 																  		<button type="button" class="btn btn-default">Assign</button>';
 				alert("Task RELEASE success : " +id);
-
-				//TODO update to proper url [UISampleCode1_1]
 				window.location=httpUrl+"/"+ appName +"/taskview?id="+id;
 
 			}else{
@@ -164,34 +129,21 @@ function releaseTask (id) {
 				alert("Unable to RELEASE the task : " +id);
 			}
         }
-		
 	});
 	
 }
 
 
 function suspendTask(id){
-	//TODO update to proper url [UISampleCode1_1]
 	var requestUrl = "/"+ appName +"/action?type=suspend_task&tid=" +id;
-	//document.getElementById("demo").innerHTML = requestUrl;
-	
-	
-	
 	$.ajax({
-		
 		type: 'POST',
 		url: httpUrl + requestUrl,
 		success: function(data){
-        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
-			//document.getElementById("demo").innerHTML = data;
-			//document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-						
+
+			var success = data.firstChild.getElementsByTagName('success')[0].textContent;	
 			if (success == 'true'){
 				//successful
-				
 				//TODO : decide whether to remove this or not
 				/*document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
@@ -199,8 +151,6 @@ function suspendTask(id){
 																  		<button type="button" class="btn btn-default">Comment</button>\
 																  		<button type="button" class="btn btn-default">Assign</button>';*/
 				alert("Task SUSPEND success : " +id);
-
-				//TODO update to proper url [UISampleCode1_1]
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 
 			}else{
@@ -208,35 +158,23 @@ function suspendTask(id){
 				alert("Unable to SUSPEND the task : " +id);
 			}
         }
-		
 	});
-
 }
 
 
 
 function resumeTask(id){
-	//TODO update to proper url [UISampleCode1_1]
 	var requestUrl = "/"+ appName +"/action?type=resume_task&tid=" +id;
-	//document.getElementById("demo").innerHTML = requestUrl;
-	
-	
-	
+
 	$.ajax({
-		
 		type: 'POST',
 		url: httpUrl + requestUrl,
 		success: function(data){
-        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
-			//document.getElementById("demo").innerHTML = data;
-			//document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
+
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-						
+		
 			if (success == 'true'){
 				//successful
-				
 				//TODO : decide whether to remove this or not
 				/*document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
@@ -244,8 +182,6 @@ function resumeTask(id){
 																  		<button type="button" class="btn btn-default">Comment</button>\
 																  		<button type="button" class="btn btn-default">Assign</button>';*/
 				alert("Task RESUME success : " +id);
-
-				//TODO update to proper url [UISampleCode1_1]
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 
 			}else{
@@ -253,37 +189,21 @@ function resumeTask(id){
 				alert("Unable to RESUME the task : " +id);
 			}
         }
-		
 	});
-
-
 }
 
 
 
 function failTask(id){
-	
-	//TODO update to proper url [UISampleCode1_1]
 	var requestUrl = "/"+ appName +"/action?type=fail_task&tid=" +id;
-	//document.getElementById("demo").innerHTML = requestUrl;
-	
-	
-	
 	$.ajax({
-		
 		type: 'POST',
 		url: httpUrl + requestUrl,
 		success: function(data){
-        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
-			//document.getElementById("demo").innerHTML = data;
-			//document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-						
+
+			var success = data.firstChild.getElementsByTagName('success')[0].textContent;	
 			if (success == 'true'){
-				//successful
-				
+				//successful			
 				//TODO : decide whether to remove this or not
 				/*document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
@@ -291,8 +211,6 @@ function failTask(id){
 																  		<button type="button" class="btn btn-default">Comment</button>\
 																  		<button type="button" class="btn btn-default">Assign</button>';*/
 				alert("Task FAIL success : " +id);
-
-				//TODO update to proper url [UISampleCode1_1]
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 
 			}else{
@@ -300,7 +218,6 @@ function failTask(id){
 				alert("Unable to FAIL the task : " +id);
 			}
         }
-		
 	});
 }
 
@@ -309,9 +226,8 @@ function failTask(id){
 
 
 //function to retrieve updates for comments
-
 function updateComments(id){
-	
+	//TODO use jquery
 	document.getElementById('commentTab').setAttribute("class","active");
 	document.getElementById('historyTab').setAttribute("class","");
 	document.getElementById('attachmentTab').setAttribute("class","");
@@ -321,27 +237,18 @@ function updateComments(id){
 	document.getElementById('AttchmentsList').style.display = "none";
 	
 	document.getElementById('addComment').style.display = "block";
-	
-	//TODO update to proper url [UISampleCode1_1]
+
 	var requestUrl = "/"+ appName +"/update?type=update_comments&tid=" +id;
-	//document.getElementById("demo").innerHTML = requestUrl;
-	
-	
-	
+
 	$.ajax({
-		
 		type: 'POST',
 		url: httpUrl + requestUrl,
 		success: function(data){
-			
-			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-						
+			var success = data.firstChild.getElementsByTagName('success')[0].textContent;		
 			if (success == 'true'){
 				//successful
 				var ns1NS = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803';
-				var commentList = data.firstChild.getElementsByTagNameNS('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803','comment');
-				
+				var commentList = data.firstChild.getElementsByTagNameNS('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803','comment');				
 				var commentViewList = new String();
 				
 				//TODO : remove logs
@@ -371,7 +278,6 @@ function updateComments(id){
 				alert("Unable to update comments the task : " +id);
 			}
         }
-		
 	});
 }
 
@@ -380,11 +286,8 @@ function updateComments(id){
 
 //function to add comment
 function addComment(id) {
-	
 	var text = document.getElementById("addCommentTextArea").value;
-	//TODO update to proper url [UISampleCode1_1]
 	var requestUrl = "/"+ appName +"/action?type=addComment_task&tid=" +id;
-	
 	var requestPayload = 	"<addComment><text><![CDATA["+text +"]]></text></addComment>";
 	
 	//TODO: remove log
@@ -398,13 +301,9 @@ function addComment(id) {
 		contentType: "text/xml",
 		dataType: "xml",
 		success: function(data){
-        	//window.location=httpUrl+"/UISampleCode1_1/inbox";
-			//document.getElementById("demo").innerHTML = data;
-			//document.getElementById("demo").innerHTML = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
+
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
 			console.log('Response : ' + data);
-			
 			if (success == 'true'){
 				//successful
 				alert("Task ADDCOMMENT success : " +id);
@@ -417,10 +316,8 @@ function addComment(id) {
         error:function(response){
         	alert('Failed : ERROR OCCURED');
     	}
-		
 	});
 
-	
 	$('#addCommentModal').modal('hide');
 	$('#addCommentModal').on('hidden.bs.modal', function (e) {
 		//TODO : try to avoid additioal update if add comment get failed
@@ -430,14 +327,7 @@ function addComment(id) {
 		
 }
 
-
-
-
-
-
-
-
-
+//function to update history
 function updateHistory(id) {
 	document.getElementById('commentTab').setAttribute("class","");
 	document.getElementById('historyTab').setAttribute("class","active");
@@ -506,8 +396,6 @@ function updateHistory(id) {
         	alert('Failed : ERROR OCCURED : ' +response);
     	}
 	});
-	
-	
 }
 
 
@@ -521,7 +409,6 @@ function updateAttachments(id){
 	document.getElementById('AttchmentsList').style.display = "block";
 	
 	document.getElementById('addComment').style.display = "none";
-	
 	
 	var requestUrl = "/"+ appName + "/update?type=update_attachments&tid=" +id;
 	
@@ -588,7 +475,6 @@ function updateAttachments(id){
 //			commentId: comment id 
 //TODO : decide whether do we have to avoid deleting comments posted by other users??
 function deleteComment(id, commentId) {
-	
 	var requestUrl = "/"+ appName + "/action?type=deleteComment&tid=" +id +"&commentId=" +commentId;
 	
 	$.ajax({
@@ -597,7 +483,7 @@ function deleteComment(id, commentId) {
 		success: function(data){	
 			
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
+
 			console.log('Response : ' + data);
 			
 			if (success == 'true'){
@@ -631,7 +517,6 @@ function deleteComment(id, commentId) {
 function assignTask(id){
 	
 	var assignee = document.getElementById("assignableUserList").value;
-	
 	var requestUrl = "/"+ appName +"/action?type=assign_task&tid=" +id +"&assignee=" +assignee;
 	
 	$.ajax({
@@ -642,13 +527,14 @@ function assignTask(id){
 		success: function(data){
 			
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
+			
 			console.log('Response : ' + data.firstChild.toString());
 			
 			if (success == 'true'){
 				//successful
 				alert("Task ASSIGNTASK success : " +id);
 				
-				$('#addCommentModal').modal('hide');
+				$('#assignTaskModal').modal('hide');
 				
 				//redirect to task view
 				window.location=httpUrl+"/"+ appName +"/taskview?id="+id;
@@ -656,7 +542,7 @@ function assignTask(id){
 			}else{
 				//unsuccessful
 				alert("Unable to ASSIGNTASK the task : " +id);
-				$('#addCommentModal').modal('hide');
+				$('#assignTaskModal').modal('hide');
 			}
         },
         error:function(response){
@@ -679,8 +565,7 @@ function assignTask(id){
 function assignTaskModalUpdate(id){
 
 	var requestUrl = "/"+ appName +"/update?type=update_assignableUsers&tid=" +id;
-	
-	
+
 	$.ajax({
 		type: 'POST',
 		url: httpUrl + requestUrl,
@@ -733,94 +618,3 @@ function assignTaskModalUpdate(id){
 	
 }
 
-
-
-
-
-
-
-
-
-
-/*
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-TODO : remove below content
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
-*/
-
-
-function completeTask(data, id){
-	var url = "/bpmn-humantask/send?req=/bpmnrest/runtime/tasks/" + id;
-	var variables = [];
-	for(var i=0; i<data.length; i++){
-		variables.push({
-			"name":data[i].name,
-			"value":data[i].value
-		});
-	}
-	var body = {
-		"action" : "complete",
-		"variables" : variables
-	};
-
-	$.ajax({
-        type: 'POST',
-        contentType: "application/json",
-        url: httpUrl + url,
-        data: JSON.stringify(body),
-        success: function(data){
-        	window.location=httpUrl+"/bpmn-humantask/inbox";
-        }
-    });
-}
-
-function reassign(username, id){
-	var url = "/bpmn-humantask/send?req=/bpmnrest/runtime/tasks/" + id;
-	var body = { 
-		"assignee" : username
-	};
-
-	$.ajax({
-        type: 'PUT',
-        contentType: "application/json",
-        url: httpUrl + url,
-        data: JSON.stringify(body),
-        success: function(data){
-        	window.location=httpUrl+"/bpmn-humantask/inbox";
-        }
-    });
-}
-
-function transfer(username, id){
-	var url = "/bpmn-humantask/send?req=/bpmnrest/runtime/tasks/" + id;
-	var body = { 
-		"owner" : username
-	};
-
-	$.ajax({
-        type: 'PUT',
-        contentType: "application/json",
-        url: httpUrl + url,
-        data: JSON.stringify(body),
-        success: function(data){
-        	window.location=httpUrl+"/bpmn-humantask/inbox";
-        }
-    });
-}
-
-function startProcess(processDefId){
-    var url = "/bpmn-humantask/send?req=/bpmnrest/runtime/process-instances";
-    var body = { 
-      "processDefinitionId": processDefId
-    };
-
-    $.ajax({
-        type: 'POST',
-        contentType: "application/json",
-        url: httpUrl + url,
-        data: JSON.stringify(body),
-        success: function(data){
-            window.location=httpUrl+"/bpmn-humantask/inbox";
-        }
-    });
-}

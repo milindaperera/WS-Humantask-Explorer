@@ -3,6 +3,9 @@
 	
 	log.info("Request query: " +request.getQueryString());
 	
+	//TODO retrive json object (getallparameters) and check that for null
+	//TODO info logs => debug logs
+	// TODO datatable plugin for pagination
 	if(request.getQueryString() != null){
 		//process search query
 		var queryReceived = true;

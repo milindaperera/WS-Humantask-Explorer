@@ -2,12 +2,13 @@
 	log.info("START : inboxModel");
 	
 	//retrieving parameters
+	//TODO getAllParameter ==> json obj and use (remove individual getparameters)
 	var paginationStr = request.getParameter("pagination");
 	var statusQuery = request.getParameter("status_query");
 	
 	log.info("pagination : " + paginationStr);
 	
-	if (paginationStr == null || paginationStr == ""){
+	if (paginationStr == null || paginationStr === ""){
 		var pagination = 1;
 	}else{
 		var pagination = parseInt(paginationStr);
@@ -25,7 +26,8 @@
 	
 	//update current page
 	session.put('currentPage', 'inbox');
-
+	
+	//TODO create common function for simpleQuery in js
 	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803" xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">\
 					   <soapenv:Header/>\
 					   <soapenv:Body>\
@@ -65,6 +67,8 @@
 		log.info('BPS RESPONSE : ' +BPSResponseXML);
 
 /*
+ * Expected Sample response
+ * 
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
   <soapenv:Body>
     <ns2:simpleQueryResponse xmlns:ns2="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">
