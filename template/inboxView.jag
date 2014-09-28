@@ -1,6 +1,24 @@
 <%
+/*
+ * Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 	var log = new Log();
-	log.info("START : inboxView");
+	log.debug("START : inboxView");
 %>
 <div class="row">
 	<ol class="breadcrumb">
@@ -14,7 +32,7 @@
 	  <div class="panel-heading">Inbox</div>
 
 	  <div class="panel-body">
-	  		<div class="col-sm-2 col-md-2 sidebar">
+	  		<div class="col-sm-2 col-md-2 col-lg-2 sidebar">
 	          <ul class="nav nav-sidebar nav-pills nav-stacked">
 	          	<%
 	          		function updateActiveStatusNavTab(status, button){
@@ -32,7 +50,7 @@
 	          </ul>
 	        </div>
 
-	        <div class="col-sm-10 col-md-10 main">
+	        <div class="col-sm-10 col-md-10 col-lg-10 main">
 			    <!-- Table -->
 			  	<table class="table">
 				    <thead>
@@ -46,7 +64,9 @@
 				    	</tr>
 				    </thead>
 				    <tbody>
-				    	<% for(var i=0; i<taskXMLList.length(); i++){ %>
+				    	<% 
+				    	if (taskXMLList != null) {
+				    		for(var i=0; i<taskXMLList.length(); i++){ %>
 				    	<tr style="cursor:pointer;" onclick="window.location='inboxtask?id=<%=taskXMLList[i].rowNS::id.toString()%>'"
 				    		onmouseover="this.style.backgroundColor='#F5F5F5';" onmouseout="this.style.backgroundColor='';">
 				    		<td><%=taskXMLList[i].rowNS::id.toString()%></td>
@@ -56,7 +76,10 @@
 							<td><%=taskXMLList[i].rowNS::status%></td>
 							<td><%=taskXMLList[i].rowNS::priority%></td>
 				    	</tr>
-				    	<% } %>
+				    	<% 	
+							}
+				    	}
+				    	%>
 				    </tbody>
 				</table>
 			</div>
@@ -83,11 +106,6 @@
 	</ul>
 </div>
 
-
-
-
-
-
 <%
-	log.info("END : inboxView");
+	log.debug("END : inboxView");
 %>

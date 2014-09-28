@@ -17,8 +17,6 @@
  * under the License.
  */
 
-	var log = new Log();
-
 	var authSuccess = session.get("authSuccess");
 	if(!authSuccess){
 		response.sendRedirect("login");

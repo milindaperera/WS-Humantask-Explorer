@@ -1,33 +1,30 @@
+<%
+/*
+ * Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+%>
 <div class="row">
 	<ol class="breadcrumb">
 	  <li><a href="#">Home</a></li>
-	  
-	  <%
-	  	var currentPage = session.get('currentPage');
-	  	switch (currentPage) {
-	  		case 'inbox':
-	  			var pageName = 'Inbox';
-	  			var pageUrl = 'inbox';
-	  			break;
-	  		case 'taskPool':
-	  			var pageName = 'TaskPool';
-	  			var pageUrl = 'taskpool';
-	  			break;
-	  		default:
-	  			var pageName = 'Unknown';
-	  			var pageUrl = 'inbox';
-	  			break;
-	  	}
-	  %>
-	  <li><a href="<%=pageUrl%>"><%=pageName%> THIS IS TASK VIEW</a></li>
-	  
-	  
+	  <li><a href="taskpool">TaskPool</a></li>
 	  <li class="active">Task : <%=id%></li>
 	</ol>
 </div>
-
 <div class="row">
-	
 	<div class="panel panel-primary">
 	  <div class="panel-heading">
 	  		Task Abstract : <%=taskAbstract.ns1NS::presentationName.text()%>
@@ -57,16 +54,12 @@
 				<td colspan='1'>
 					<p><small><b>Status : </b><%=taskAbstract.ns1NS::status.text()%></small></p>
 					<p><small><b>Priority : </b><%=taskAbstract.ns1NS::priority.text()%></small></p>
-				</td>
-				
+				</td>	
 	    	</tr>
-	    	
 	    </tbody>
 	  </table>
 	</div>
 </div>
-
-
 <div class="row" name="additionalInfoSection">
 	<ul class="nav nav-tabs" role="tablist">
 		<li class="active" id="commentTab">
@@ -81,14 +74,13 @@
 		<li id="attachmentTab">
 			<a href="#additionalInfoSection" onclick="updateAttachments(<%=id%>)">Attachments</a>
 		</li>
-		
 		<li id="addComment" style="float:right;">
 			<a href="#additionalInfoSection" data-toggle="modal" data-target="#addCommentModal">
 				<span class="glyphicon glyphicon-plus"></span>
 			</a>
 		</li>
 	</ul>
-
+	
 	<ul class="list-group" id="commentList">
 		<%for (var i=0; i < commentList.length(); i++){%>
 			<li class="list-group-item">
@@ -113,6 +105,3 @@
 		<li class="list-group-item">not implemented !</li>
 	</ul>
 </div>
-
-<!-- TODO : remove following tag -->
-<p id="demo">123</p>

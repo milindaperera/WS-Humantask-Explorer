@@ -1,6 +1,6 @@
 <%
 	var log = new Log();
-	log.info("START : taskPoolController");
+	log.debug("START : taskPoolController");
 
 	var authSuccess = session.get("authSuccess");
 	if(!authSuccess){
@@ -10,9 +10,11 @@
 		include("/model/taskPoolModel.jag");
 		include("/template/partials/header.jag");
 		include("/template/partials/navigation.jag");
-		include("/template/taskPoolView.jag");
+		if (taskXMLList != null) {
+			include("/template/taskPoolView.jag");
+		}
 		include("/template/partials/footer.jag");
 	}
 	
-	log.info("END : taskPoolController");
+	log.debug("END : taskPoolController");
 %>

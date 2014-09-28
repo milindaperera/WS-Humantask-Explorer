@@ -27,20 +27,15 @@
 		include("/template/partials/navigation.jag");
 		include("/template/modals/addCommentModal.jag");
 		include("/template/modals/assignTaskModal.jag");
-		
-		var user = session.get('userName');
-		
-		//TODO decide whether this if-else is required??
-		if (user == taskAbstract.ns1NS::actualOwner.text()){
-			//update current page
-			session.put('currentPage', 'inbox');
-			include("/template/inboxTaskView.jag");			
-		} else {
-			//update current page
-			//session.put('currentPage', 'taskPool');			
-			include("/template/taskView.jag");
-		}
 
+		if(taskAbstract != null){
+			var user = session.get('userName');
+			if (user == taskAbstract.ns1NS::actualOwner.text()){
+				include("/template/inboxTaskView.jag");			
+			} else {			
+				include("/template/taskView.jag");
+			}
+		}
 		include("/template/partials/footer.jag");
 	}
 %>

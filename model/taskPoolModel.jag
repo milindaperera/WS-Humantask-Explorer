@@ -1,82 +1,58 @@
 <%
-	log.info("START : taskPoolModel");
+/*
+ * Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+	var log = new Log();
+	log.debug("START : taskPoolModel");
 	
-	//update current page
-	session.put('currentPage', 'taskPool');
+	//initialize BPS HT service request creator
+	var htRequest = require ('/js/WSHTRequest.js');
+	htRequest.initHTServerInfo(BPSUrl, session.get('BPSSessionCookie'));
 	
 	var pagination = request.getParameter("pagination");
-			
-	log.info("pagination : " + pagination);
-	
-	if (pagination == null || pagination == ""){
+	if (pagination == null || pagination === ""){
 		pagination = 1;
 	}
-	
 	
 	var pageSize = 10;
 	var pageNumber = pagination - 1;
 	var queryOrder = 'DESCENDING';
 	var queryOrderBy = 'CREATED_DATE';
 	var queryCategory = 'CLAIMABLE';
-	
-	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803" xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">\
-					   <soapenv:Header/>\
-					   <soapenv:Body>\
-					      <ns:simpleQuery>\
-					         <ns:simpleQueryInput>\
-            					<ns1:pageSize>'+pageSize +'</ns1:pageSize>\
-            					<ns1:pageNumber>' +pageNumber +'</ns1:pageNumber>\
-					            <ns1:simpleQueryCategory>' +queryCategory +'</ns1:simpleQueryCategory>\
-            					<ns1:queryOrder>' +queryOrder +'</ns1:queryOrder>\
-            					<ns1:queryOrderBy>' +queryOrderBy +'</ns1:queryOrderBy>\
-					         </ns:simpleQueryInput>\
-					      </ns:simpleQuery>\
-					   </soapenv:Body>\
-					</soapenv:Envelope>';
 
-	//get session cookie with BPS
-		BPSSessionCookie = session.get('BPSSessionCookie');
-		log.info('SESSION COOKIE:' +BPSSessionCookie);
+	try{
+		var taskXMLList = null;
+		var paginatePageCount = 0;
+		var BPSResponseXML = new XML(htRequest.simpleQueryBasic("", pageSize, pageNumber, queryCategory, 
+																					queryOrder, queryOrderBy));
+		log.debug('simpleQueryBasic BPS RESPONSE : ' +BPSResponseXML);
+
+		var soapenvNS = new Namespace('http://schemas.xmlsoap.org/soap/envelope/');
+		var ns1NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
+		var ns2NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803');
+		var rowNS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
 		
-		var httpClient = new XMLHttpRequest();
-	
-		//TODO : Retrieve endpoint from proper config file
-		var endPoint = BPSUrl + '/services/HumanTaskClientAPIAdmin/';
-	
-		httpClient.open('POST', endPoint, false);
-		httpClient.setRequestHeader('COOKIE', BPSSessionCookie);
-		httpClient.setRequestHeader('SOAPAction', 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/simpleQuery');
-		httpClient.setRequestHeader('Content-Type','text/xml');
-		
-		try{
-				httpClient.send(payload);
-				var BPSResponse = httpClient.responseText;
-				var BPSResponseXML = new XML(httpClient.responseText);
-				log.info('BPS RESPONSE : ' +BPSResponseXML);
-		
-		
-			var soapenvNS = new Namespace('http://schemas.xmlsoap.org/soap/envelope/');
-			var ns1NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
-			var ns2NS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803');
-			var rowNS = new Namespace('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803');
-	
-			var temp = BPSResponseXML..soapenvNS::Body.ns2NS::simpleQueryResponse.ns2NS::taskSimpleQueryResultSet.rowNS::row;
-			log.info('XML EXTRACT : ' +temp);
-			
-			var taskXMLList = BPSResponseXML..soapenvNS::Body.ns2NS::simpleQueryResponse.ns2NS::taskSimpleQueryResultSet.rowNS::row;
-			log.info('taskXMLList length - ' +taskXMLList.length());
-	
-			log.info('task1 - ' +taskXMLList[0]);
-			
-			//TODO remove this for loop
-			for(var i=0; i < taskXMLList.length(); i++){
-				log.info('TASK ' +i);
-				log.info(taskXMLList[i].toString());
-			}
-	
-			var paginatePageCount =  parseInt(BPSResponseXML..soapenvNS::Body.ns2NS::simpleQueryResponse.ns2NS::taskSimpleQueryResultSet.ns1NS::pages);
-			
-		}catch(e){
-			log.error(e.toString()); 
-		}
+		taskXMLList = BPSResponseXML..soapenvNS::Body.ns2NS::simpleQueryResponse.ns2NS::taskSimpleQueryResultSet.rowNS::row;
+		paginatePageCount =  parseInt(BPSResponseXML..soapenvNS::Body.ns2NS::simpleQueryResponse.ns2NS::taskSimpleQueryResultSet.ns1NS::pages);
+	}catch(e){
+		log.error(e);
+		//TODO Design proper ERROR page
+		response.sendRedirect('login');
+	}
+	log.debug("END : taskPoolModel");
 %>

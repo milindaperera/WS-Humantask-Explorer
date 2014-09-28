@@ -20,11 +20,11 @@
 	include ("/model/common.jag");
 	
 	var log = new Log();
-
+	
 	var username = request.getParameter("username");
 	var password = request.getParameter("password");
 
-	if(username == "" || password == ""){
+	if(username === "" || password === ""){
 		authSuccess = false;
 	} else{
 		var authSuccess = HTTPAuthenticate(username, password, 'localhost');
@@ -48,14 +48,10 @@
 	
 	
 	function HTTPAuthenticate(username, password, remoteAddr){
-		var log = new Log();
-		log.info("start HTTP authentication function");
 
 		var httpAuth = new XMLHttpRequest();
-
-		//TODO : Retrieve endpoint from proper config file
 		var endPoint = BPSUrl + '/services/AuthenticationAdmin.AuthenticationAdminHttpsSoap11Endpoint/';
-
+		
 		httpAuth.open('POST', endPoint, false);
 		httpAuth.setRequestHeader('SOAPAction', 'urn:login');
 		httpAuth.setRequestHeader('Content-Type','text/xml');
@@ -73,11 +69,10 @@
 
 		try{
 			httpAuth.send(payload);
-
 			var BPSResponse = httpAuth.responseText;
-			
 			log.debug('Login RESPONSE:' +httpAuth.responseText.toString());
-
+			
+			//TODO Correct this
 			var returnStart = BPSResponse.indexOf('<ns:return>') + '<ns:return>'.length;
 			var returnEnd = BPSResponse.indexOf('</ns:return>');
 			var isLoginSuccess = BPSResponse.substring(returnStart, returnEnd);
@@ -87,18 +82,16 @@
 			if(isLoginSuccess == 'true'){
 				//retrieve session cookie with BPS and store in session
 				var cookie = httpAuth.getResponseHeader('Set-Cookie').split(';')[0];
+				session.put('BPSSessionCookie' , cookie);
 				
 				log.debug('Session cookie : ' +cookie);
-				log.debug('SessionID : ' +session.getId());
-
-				session.put('BPSSessionCookie' , cookie);
 				return true;
 			}else{
-				log.info('Login in to BPS Failed');
+				log.debug('Login in to BPS Failed');
 				return false;
 			}
 		}catch(e){
-			 log.error(e.toString()); 
+			 log.error(e); 
 		}
 	}
 %>
