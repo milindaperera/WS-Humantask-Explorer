@@ -162,3 +162,281 @@ function getComments(id){
 	return BPSResponse;
 }
 
+
+/**
+ * function to claim task
+ * @param id : ID of the task to claim
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+
+function claimTask(id){
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+									xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:claim>\
+					         <ns:identifier>' +id +'</ns:identifier>\
+					      </ns:claim>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';			
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/claim';	
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+}
+
+/**
+ * Function to make start tasks service request
+ * @param id ID of the task to start progress
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+function startTask(id){
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+						xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:start>\
+					         <ns:identifier>' +id +'</ns:identifier>\
+					      </ns:start>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';		
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/start';	
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+}
+
+
+/**
+ * Function to make stop tasks service request
+ * @param id ID of the task to stop progress
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+function stopTask(id){
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+								xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:stop>\
+					         <ns:identifier>' +id +'</ns:identifier>\
+					      </ns:stop>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';						
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/stop';		
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+	
+}
+
+
+/**
+ * Function to make release tasks service request
+ * @param id ID of the task to release
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+function releaseTask(id){			
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+									xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:release>\
+					         <ns:identifier>' +id +'</ns:identifier>\
+					      </ns:release>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/release';
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+}
+
+/**
+ * Function to make suspend tasks service request
+ * @param id ID of the task to suspend
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+function suspendTask(id){
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+										xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:suspend>\
+					         <ns:identifier>' +id +'</ns:identifier>\
+					      </ns:suspend>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';	
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/suspend';
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+}
+
+
+/**
+ * Function to make resume suspended tasks service request
+ * @param id ID of the task to resume
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+function resumeTask(id){
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+									xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:resume>\
+					         <ns:identifier>' +id +'</ns:identifier>\
+					      </ns:resume>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/resume';
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+}
+
+/**
+ * Function to make fail tasks service request
+ * @param id ID of the task to fail
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+function failTask(id){		
+	//TODO decide whether need to add fault information : fault Name and Data
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+											 xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"\
+											 xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:fail>\
+					         <ns:identifier>'+id +'</ns:identifier>\
+					      </ns:fail>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/fail';
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+}
+
+/**
+ * Function to make add comment service request
+ * @param id ID of the task to add comment
+ * @param text text comment
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+function addComment(id, text){
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+								xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:addComment>\
+					         <ns:identifier>'+id +'</ns:identifier>\
+					         <ns:text>'+text +'</ns:text>\
+					      </ns:addComment>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';	
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/addComment';
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+}
+
+/**
+ * Function to make delete comment service request
+ * @param id ID of the task to delete comment
+ * @param taskId - ID of task of relates to comment
+ * @param commentId - comment id  
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+function deleteComment(taskId, commentId){		
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+						xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:deleteComment>\
+					         <ns:taskIdentifier>'+taskId +'</ns:taskIdentifier>\
+					         <ns:commentIdentifier>'+commentId +'</ns:commentIdentifier>\
+					      </ns:deleteComment>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/deleteComment';	
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+}
+
+//function to 
+/**
+ * Function to make assign task (delegate) service request
+ * @param id - ID of the task to assign
+ * @param userName - user name of the new asignee 
+ * @returns response payload from HumanTaskClientAPIAdmin service
+ * @throws exception
+ */
+function assignTask(id, userName){		
+	var payload = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"\
+							xmlns:ns="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803"\
+							xmlns:ns1="http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803">\
+					   <soapenv:Header/>\
+					   <soapenv:Body>\
+					      <ns:delegate>\
+					         <ns:identifier>'+id +'</ns:identifier>\
+					         <ns:organizationalEntity>\
+					            <ns1:user>'+userName +'</ns1:user>\
+					         </ns:organizationalEntity>\
+					      </ns:delegate>\
+					   </soapenv:Body>\
+					</soapenv:Envelope>';
+	var soapAction = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803/delegate';
+	var BPSResponse = null;
+	try {
+		BPSResponse = requestBPS(this.endPoint, soapAction, this.cookie, payload);
+	} catch (e) {
+		throw e;
+	}
+	return BPSResponse;
+}

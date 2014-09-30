@@ -6,18 +6,14 @@
 	var htRequest = require ('/js/WSHTRequest.js');
 	htRequest.initHTServerInfo(BPSUrl, session.get('BPSSessionCookie'));
 	
-	//TODO retrive json object (getallparameters) and check that for null
-	//TODO info logs => debug logs
 	// TODO datatable plugin for pagination
 	var requestParameters = request.getAllParameters();
-	//if(request.getQueryString() != null){
-	if(requestParameters != null){
+	if(request.getQueryString() != null){
 		//At first request (or without query parameters) no need to load task list
 		//process search query
 		var queryReceived = true;
 		
 		//retrieving parameters getAllParameter to json obj 
-		
 		var taskName = requestParameters.taskName;
 		var taskStatus = requestParameters.taskStatus;
 		var taskCategory = requestParameters.taskCategory;

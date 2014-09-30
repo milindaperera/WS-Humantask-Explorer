@@ -21,9 +21,7 @@ var httpUrl = window.location.protocol + "//" + window.location.host;
 var appName = "WS-Humantask-Explorer"; //TODO finalize appName
 
 function claimTask(id){
-
 	var requestUrl = "/"+ appName +"/action?type=claim_task&tid=" +id;
-
 	$.ajax({
 		type: 'POST',
 		url: httpUrl + requestUrl,
@@ -36,15 +34,17 @@ function claimTask(id){
 				//unsuccessful
 				alert("Unable to claim the task : " +id);
 			}
-        }		
+        },
+        error:function(response){
+        	//TODO : Display error reason
+        	console.error(response);
+        	alert('Failed : ERROR OCCURED');
+    	}
 	});
 }
 
-
-
 function startTask(id) {
 	var requestUrl = "/"+ appName +"/action?type=start_task&tid=" +id;
-
 	$.ajax({		
 		type: 'POST',
 		url: httpUrl + requestUrl,
@@ -66,17 +66,13 @@ function startTask(id) {
 				alert("Unable to start the task : " +id);
 			}
         }
-		
 	});
 }
 
-
-
 function stopTask(id){
 	var requestUrl = "/"+ appName +"/action?type=stop_task&tid=" +id;
-
+	
 	$.ajax({
-		
 		type: 'POST',
 		url: httpUrl + requestUrl,
 		success: function(data){
@@ -102,8 +98,6 @@ function stopTask(id){
 
 }
 
-
-
 function releaseTask (id) {
 	var requestUrl = "/"+ appName +"/action?type=release_task&tid=" +id;
 	
@@ -111,7 +105,6 @@ function releaseTask (id) {
 		type: 'POST',
 		url: httpUrl + requestUrl,
 		success: function(data){
-
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;	
 			if (success == 'true'){
 				//successful
@@ -130,12 +123,11 @@ function releaseTask (id) {
 			}
         }
 	});
-	
 }
-
 
 function suspendTask(id){
 	var requestUrl = "/"+ appName +"/action?type=suspend_task&tid=" +id;
+	
 	$.ajax({
 		type: 'POST',
 		url: httpUrl + requestUrl,
@@ -152,7 +144,6 @@ function suspendTask(id){
 																  		<button type="button" class="btn btn-default">Assign</button>';*/
 				alert("Task SUSPEND success : " +id);
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
-
 			}else{
 				//unsuccessful
 				alert("Unable to SUSPEND the task : " +id);
@@ -172,7 +163,6 @@ function resumeTask(id){
 		success: function(data){
 
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-		
 			if (success == 'true'){
 				//successful
 				//TODO : decide whether to remove this or not
@@ -183,7 +173,6 @@ function resumeTask(id){
 																  		<button type="button" class="btn btn-default">Assign</button>';*/
 				alert("Task RESUME success : " +id);
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
-
 			}else{
 				//unsuccessful
 				alert("Unable to RESUME the task : " +id);
@@ -196,6 +185,7 @@ function resumeTask(id){
 
 function failTask(id){
 	var requestUrl = "/"+ appName +"/action?type=fail_task&tid=" +id;
+	
 	$.ajax({
 		type: 'POST',
 		url: httpUrl + requestUrl,
@@ -212,7 +202,6 @@ function failTask(id){
 																  		<button type="button" class="btn btn-default">Assign</button>';*/
 				alert("Task FAIL success : " +id);
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
-
 			}else{
 				//unsuccessful
 				alert("Unable to FAIL the task : " +id);
@@ -221,22 +210,21 @@ function failTask(id){
 	});
 }
 
-
-
-
-
 //function to retrieve updates for comments
 function updateComments(id){
 	//TODO use jquery
-	document.getElementById('commentTab').setAttribute("class","active");
-	document.getElementById('historyTab').setAttribute("class","");
-	document.getElementById('attachmentTab').setAttribute("class","");
+	$('#commentTab').attr("class","active");
+	$('#historyTab').attr("class","");
+	$('#attachmentTab').attr("class","");
 	
-	document.getElementById('commentList').style.display = "block";
-	document.getElementById('historyList').style.display = "none";
-	document.getElementById('AttchmentsList').style.display = "none";
+	//$('#commentList').style.display = "block";
+	//$('#historyList').style.display = "none";
+	//$('#AttchmentsList').style.display = "none";
+	$('#commentList').css("display","block");
+	$('#historyList').css("display","none");
+	$('#AttchmentsList').css("display","none");
 	
-	document.getElementById('addComment').style.display = "block";
+	$('#addComment').css("display","block");
 
 	var requestUrl = "/"+ appName +"/update?type=update_comments&tid=" +id;
 
@@ -250,13 +238,8 @@ function updateComments(id){
 				var ns1NS = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803';
 				var commentList = data.firstChild.getElementsByTagNameNS('http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803','comment');				
 				var commentViewList = new String();
-				
-				//TODO : remove logs
-				console.log('Comments = ' +commentList.length);
-				
+
 				for (var i = 0; i < commentList.length; i++) {
-					console.log(commentList[i].getElementsByTagNameNS(ns1NS,'text')[0].textContent);
-					
 					var dateInfo = new Date(commentList[i].getElementsByTagNameNS(ns1NS,'lastModifiedTime')[0].textContent);
 					
 					commentViewList = commentViewList + '<li class="list-group-item" id="comment_' + commentList[i].getElementsByTagNameNS(ns1NS,'id')[0].textContent +'">\
@@ -270,8 +253,7 @@ function updateComments(id){
 															</li>';	
 				}
 				
-				document.getElementById('commentList').innerHTML = commentViewList;
-
+				$('#commentList').html(commentViewList);
 			}else{
 				//unsuccessful
 				//TODO : find way to find reason for failure and put in alert
