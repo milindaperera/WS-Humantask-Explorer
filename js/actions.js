@@ -16,7 +16,6 @@
  * under the License.
  */
 
-//TODO change to window.location
 var httpUrl = window.location.protocol + "//" + window.location.host;
 var appName = "WS-Humantask-Explorer"; //TODO finalize appName
 
@@ -53,12 +52,12 @@ function startTask(id) {
 			if (success == 'true'){
 				//successful
 				//TODO : decide whether to remove this or not
-				document.getElementById('taskActionBtns').innerHTML = '<button  onclick="stopTask(<%=id%>)" type="button" class="btn btn-default">Stop</button>\
+				$('#taskActionBtns').html('<button  onclick="stopTask(<%=id%>)" type="button" class="btn btn-default">Stop</button>\
 																  		<button type="button" class="btn btn-default">Release</button>\
 																  		<button type="button" class="btn btn-default">Suspend</button>\
 																  		<button type="button" class="btn btn-default">Comment</button>\
 																  		<button type="button" class="btn btn-default">Assign</button>\
-																  		<button type="button" class="btn btn-default">Fail</button>';
+																  		<button type="button" class="btn btn-default">Fail</button>');
 				alert("Task Start success : " +id);
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 			}else{
@@ -81,12 +80,12 @@ function stopTask(id){
 			if (success == 'true'){
 				//successful
 				//TODO : decide whether to remove this or not
-				document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
+				$('#taskActionBtns').html('<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button type="button" class="btn btn-default">Release</button>\
 																  		<button type="button" class="btn btn-default">Suspend</button>\
 																  		<button type="button" class="btn btn-default">Comment</button>\
-																  		<button type="button" class="btn btn-default">Assign</button>';
-				alert("Task Start success : " +id);
+																  		<button type="button" class="btn btn-default">Assign</button>');
+				alert("Task STOP success : " +id);
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 
 			}else{
@@ -109,11 +108,11 @@ function releaseTask (id) {
 			if (success == 'true'){
 				//successful
 				//TODO : decide whether to remove this or not
-				document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
+				$('#taskActionBtns').html('<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
 																  		<button type="button" class="btn btn-default">Suspend</button>\
 																  		<button type="button" class="btn btn-default">Comment</button>\
-																  		<button type="button" class="btn btn-default">Assign</button>';
+																  		<button type="button" class="btn btn-default">Assign</button>');
 				alert("Task RELEASE success : " +id);
 				window.location=httpUrl+"/"+ appName +"/taskview?id="+id;
 
@@ -137,11 +136,11 @@ function suspendTask(id){
 			if (success == 'true'){
 				//successful
 				//TODO : decide whether to remove this or not
-				/*document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
+				$('#taskActionBtns').html('<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
 																  		<button type="button" class="btn btn-default">Suspend</button>\
 																  		<button type="button" class="btn btn-default">Comment</button>\
-																  		<button type="button" class="btn btn-default">Assign</button>';*/
+																  		<button type="button" class="btn btn-default">Assign</button>');
 				alert("Task SUSPEND success : " +id);
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 			}else{
@@ -166,11 +165,11 @@ function resumeTask(id){
 			if (success == 'true'){
 				//successful
 				//TODO : decide whether to remove this or not
-				/*document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
+				$('#taskActionBtns').html('<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
 																  		<button type="button" class="btn btn-default">Suspend</button>\
 																  		<button type="button" class="btn btn-default">Comment</button>\
-																  		<button type="button" class="btn btn-default">Assign</button>';*/
+																  		<button type="button" class="btn btn-default">Assign</button>');
 				alert("Task RESUME success : " +id);
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 			}else{
@@ -195,11 +194,11 @@ function failTask(id){
 			if (success == 'true'){
 				//successful			
 				//TODO : decide whether to remove this or not
-				/*document.getElementById('taskActionBtns').innerHTML = '<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
+				$('#taskActionBtns').html('<button onclick="startTask(<%=id%>)" type="button" class="btn btn-default">Start</button>\
 																  		<button onclick="releaseTask(<%=id%>)" type="button" class="btn btn-default">Release</button>\
 																  		<button type="button" class="btn btn-default">Suspend</button>\
 																  		<button type="button" class="btn btn-default">Comment</button>\
-																  		<button type="button" class="btn btn-default">Assign</button>';*/
+																  		<button type="button" class="btn btn-default">Assign</button>');
 				alert("Task FAIL success : " +id);
 				window.location=httpUrl+"/"+ appName +"/inboxtask?id="+id;
 			}else{
@@ -212,21 +211,17 @@ function failTask(id){
 
 //function to retrieve updates for comments
 function updateComments(id){
-	//TODO use jquery
 	$('#commentTab').attr("class","active");
 	$('#historyTab').attr("class","");
 	$('#attachmentTab').attr("class","");
-	
-	//$('#commentList').style.display = "block";
-	//$('#historyList').style.display = "none";
-	//$('#AttchmentsList').style.display = "none";
+
 	$('#commentList').css("display","block");
 	$('#historyList').css("display","none");
 	$('#AttchmentsList').css("display","none");
 	
 	$('#addComment').css("display","block");
 
-	var requestUrl = "/"+ appName +"/update?type=update_comments&tid=" +id;
+	var requestUrl = "/" +appName +"/update?type=update_comments&tid=" +id;
 
 	$.ajax({
 		type: 'POST',
@@ -272,24 +267,17 @@ function addComment(id) {
 	var requestUrl = "/"+ appName +"/action?type=addComment_task&tid=" +id;
 	var requestPayload = 	"<addComment><text><![CDATA["+text +"]]></text></addComment>";
 	
-	//TODO: remove log
-	console.log('payload = ' + requestPayload);
-	
 	$.ajax({
-		
 		type: 'POST',
 		url: httpUrl + requestUrl,
 		data: requestPayload,
 		contentType: "text/xml",
 		dataType: "xml",
 		success: function(data){
-
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			console.log('Response : ' + data);
 			if (success == 'true'){
 				//successful
 				alert("Task ADDCOMMENT success : " +id);
-				
 			}else{
 				//unsuccessful
 				alert("Unable to ADDCOMMENT the task : " +id);
@@ -302,7 +290,6 @@ function addComment(id) {
 
 	$('#addCommentModal').modal('hide');
 	$('#addCommentModal').on('hidden.bs.modal', function (e) {
-		//TODO : try to avoid additioal update if add comment get failed
 		//update comment list in ui
 		updateComments(id);
 	});
@@ -310,16 +297,16 @@ function addComment(id) {
 }
 
 //function to update history
-function updateHistory(id) {
-	document.getElementById('commentTab').setAttribute("class","");
-	document.getElementById('historyTab').setAttribute("class","active");
-	document.getElementById('attachmentTab').setAttribute("class","");
+function updateHistory(id) {	
+	$('#commentTab').attr("class","");
+	$('#historyTab').attr("class","active");
+	$('#attachmentTab').attr("class","");
+
+	$('#commentList').css("display","none");
+	$('#historyList').css("display","block");
+	$('#AttchmentsList').css("display","none");
 	
-	document.getElementById('commentList').style.display = "none";
-	document.getElementById('historyList').style.display = "block";
-	document.getElementById('AttchmentsList').style.display = "none";
-	
-	document.getElementById('addComment').style.display = "none";
+	$('#addComment').css("display","none");
 	
 	var requestUrl = "/"+ appName + "/update?type=update_history&tid=" +id;
 	
@@ -328,22 +315,13 @@ function updateHistory(id) {
 		url: httpUrl + requestUrl,
 		success: function(data){		
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-			console.log('Response : ' + data);
-			
 			if (success == 'true'){
 				//successful				
 				var historyList = data.firstChild.getElementsByTagName('event');
-				
 				var historyViewList = new String();
-				
-				//TODO : remove logs
-				console.log('Comments = ' +historyList.length);
 				
 				//TODO : decide whether do we need to display in ASCENDING order or DESCENDING order
 				for (var i = 0; i < historyList.length; i++) {
-					console.log(historyList[i].getElementsByTagName('eventType')[0].textContent);
-					
 					var dateInfo = new Date(historyList[i].getElementsByTagName('eventTime')[0].textContent);
 					
 					//TODO ******** Decide whether do we need to display old state
@@ -366,9 +344,7 @@ function updateHistory(id) {
 															+'</div>\
 														</li>';
 				}
-				
-				document.getElementById('historyList').innerHTML = historyViewList;
-				
+				$('#historyList').html(historyViewList);
 			}else{
 				//unsuccessful
 				alert("Unable to ADDCOMMENT the task : " +id);
@@ -381,29 +357,25 @@ function updateHistory(id) {
 }
 
 
-function updateAttachments(id){
-	document.getElementById('commentTab').setAttribute("class","");
-	document.getElementById('historyTab').setAttribute("class","");
-	document.getElementById('attachmentTab').setAttribute("class","active");
+function updateAttachments(id){	
+	$('#commentTab').attr("class","");
+	$('#historyTab').attr("class","");
+	$('#attachmentTab').attr("class","active");
+
+	$('#commentList').css("display","none");
+	$('#historyList').css("display","none");
+	$('#AttchmentsList').css("display","block");
 	
-	document.getElementById('commentList').style.display = "none";
-	document.getElementById('historyList').style.display = "none";
-	document.getElementById('AttchmentsList').style.display = "block";
-	
-	document.getElementById('addComment').style.display = "none";
+	$('#addComment').css("display","none");
 	
 	var requestUrl = "/"+ appName + "/update?type=update_attachments&tid=" +id;
-	
-	
+
 	$.ajax({
 		type:'POST',
 		url: httpUrl + requestUrl,
 		success: function(data){	
-			
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-			console.log('Response : ' + data);
-			
+
 			if (success == 'true'){
 				//successful				
 				var ns1NS = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/types/200803';
@@ -411,13 +383,7 @@ function updateAttachments(id){
 				var attachmentList = data.firstChild.getElementsByTagNameNS(ns2NS,'info');
 				
 				var attachmentViewList = new String();
-				
-				//TODO : remove logs
-				console.log('attachments = ' +attachmentList.length);
-				
-				for (var i = 0; i < attachmentList.length; i++) {
-					console.log(attachmentList[i].getElementsByTagNameNS(ns1NS,'name')[0].textContent);
-					
+				for (var i = 0; i < attachmentList.length; i++) {					
 					var dateInfo = new Date(attachmentList[i].getElementsByTagNameNS(ns1NS,'attachedTime')[0].textContent);
 					
 					attachmentViewList = attachmentViewList + 	'<li class="list-group-item" id="attachment_' + attachmentList[i].getElementsByTagNameNS(ns1NS,'identifier')[0].textContent +'">'
@@ -434,10 +400,8 @@ function updateAttachments(id){
 																	+'</div>'
 																+'</li>';	
 				}
-				
-				
-				document.getElementById('AttchmentsList').innerHTML = attachmentViewList;
-				
+
+				$('#AttchmentsList').html(attachmentViewList);
 			}else{
 				//unsuccessful
 				alert("Unable to ADDCOMMENT the task : " +id);
@@ -462,20 +426,13 @@ function deleteComment(id, commentId) {
 	$.ajax({
 		type: 'POST',
 		url: httpUrl + requestUrl,
-		success: function(data){	
-			
+		success: function(data){		
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
 
-			console.log('Response : ' + data);
-			
 			if (success == 'true'){
 				//successful
-				//TODO : remove log
-				console.log("comment_" + commentId);
-				
 				var commentElementId = "comment_" + commentId;
 				var element = document.getElementById(commentElementId);
-				
 				if (element != null){
 					element.parentNode.removeChild(element);
 				}else{
@@ -497,7 +454,6 @@ function deleteComment(id, commentId) {
 //function to assign task to another user
 //params: 	id: task id
 function assignTask(id){
-	
 	var assignee = document.getElementById("assignableUserList").value;
 	var requestUrl = "/"+ appName +"/action?type=assign_task&tid=" +id +"&assignee=" +assignee;
 	
@@ -507,11 +463,8 @@ function assignTask(id){
 		url: httpUrl + requestUrl,
 		dataType: "xml",
 		success: function(data){
-			
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-			console.log('Response : ' + data.firstChild.toString());
-			
+
 			if (success == 'true'){
 				//successful
 				alert("Task ASSIGNTASK success : " +id);
@@ -545,9 +498,8 @@ function assignTask(id){
  * 								Modal related functions
  *************************************************************************************************/
 function assignTaskModalUpdate(id){
-
 	var requestUrl = "/"+ appName +"/update?type=update_assignableUsers&tid=" +id;
-
+	
 	$.ajax({
 		type: 'POST',
 		url: httpUrl + requestUrl,
@@ -555,22 +507,15 @@ function assignTaskModalUpdate(id){
 			
 			//TODO : fix error if getElementsByTagName returns null
 			var success = data.firstChild.getElementsByTagName('success')[0].textContent;
-			
-			console.log('Response : ' + data);
-			
+
 			if (success == 'true'){
 				//successful
-				//TODO : remove log
-				console.log("assignTaskModalUpdate SUCCESS");
-				
 				var ns2NS = 'http://docs.oasis-open.org/ns/bpel4people/ws-humantask/api/200803';
 				var userList = data.firstChild.getElementsByTagNameNS(ns2NS ,'user');
-				
+			
 				var userListDisplay = new String();
-				
 				if (userList.length > 0){
 					for (var i = 0; i < userList.length; i++) {	
-						console.log('users :' + userList[i].textContent);
 						userListDisplay = userListDisplay + '<option value="'+userList[i].textContent +'">'+userList[i].textContent +'</option>';
 					}
 					
@@ -586,7 +531,6 @@ function assignTaskModalUpdate(id){
 				}
 				//show modal
 				$('#assignTaskModal').modal();
-				
 			}else{
 				//unsuccessful
 				alert("Unable to retrieve assignable user list : " +id);
